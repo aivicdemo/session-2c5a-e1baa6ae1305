@@ -1,0 +1,1103 @@
+[
+  {
+    "systemId": "itg-1",
+    "systemName": "修理業務管理システム",
+    "screens": [
+      {
+        "id": "scr-1795168135518",
+        "name": "修理案件管理ダッシュボード",
+        "purpose": "修理案件の進捗状況を一覧表示し、状態別フィルタリング・色分け表示により案件管理を効率化。了承待ち・部品入荷待ちを強調表示し、状態遷移履歴を確認できる。",
+        "items": [
+          "修理案件一覧テーブル",
+          "状態別フィルタリングドロップダウン",
+          "状態別色分け表示（了承待ち赤・部品入荷待ちオレンジ等）",
+          "案件ステータスバッジ",
+          "案件詳細表示パネル",
+          "状態遷移履歴タイムライン",
+          "状態遷移日時・変更者表示",
+          "検索・ソート機能",
+          "案件ID・顧客名・修理内容カラム",
+          "現在状態・前回状態表示",
+          "部品入荷予定日表示",
+          "顧客連絡履歴リンク"
+        ]
+      },
+      {
+        "id": "scr-1795168145163",
+        "name": "修理案件詳細・進捗管理画面",
+        "purpose": "修理案件の詳細情報（部品入荷予定日、顧客連絡状況、見積承認の有無）を作業場のタブレットで即座に確認でき、修理進捗を更新・記録し、状態遷移と顧客連絡履歴を一元管理する",
+        "items": [
+          "修理案件基本情報表示エリア",
+          "案件ID・顧客名・修理品目・受付日時",
+          "現在の修理状態表示",
+          "部品入荷予定日一覧",
+          "部品入荷状況インジケーター",
+          "見積情報パネル",
+          "見積承認ステータス表示",
+          "見積金額表示",
+          "顧客連絡履歴タイムライン",
+          "最終連絡日時・連絡方法・内容表示",
+          "状態遷移履歴ログ",
+          "状態変更日時・変更者・変更内容表示"
+        ]
+      },
+      {
+        "id": "scr-1795168163853",
+        "name": "見積・金額判定・承認管理画面",
+        "purpose": "修理案件の見積金額を入力・確認し、金額段階に基づいて自動判定・承認フローを管理。顧客事前了承との照合により修理開始を自動進行させ、店長確認が必要な案件を適切に振り分ける。",
+        "items": [
+          "修理案件一覧（フィルタ・ソート機能付き）",
+          "案件基本情報表示エリア",
+          "顧客情報表示パネル",
+          "見積金額入力欄",
+          "見積金額段階判定結果表示",
+          "顧客事前了承状態表示",
+          "自動判定ロジック実行ボタン",
+          "見積金額と顧客了承の照合結果",
+          "修理開始フロー自動進行ボタン",
+          "店長確認待ち状態の案件リスト",
+          "見積連絡日時入力欄",
+          "見積連絡日時記録ボタン"
+        ]
+      },
+      {
+        "id": "scr-1795168174415",
+        "name": "顧客連絡・催促管理画面",
+        "purpose": "了承待ち修理案件に対して7日・14日経過時の自動判定を実行し、催促または返却扱いへの状態遷移を管理し、顧客連絡履歴を記録する画面",
+        "items": [
+          "了承待ち修理案件一覧",
+          "案件経過日数表示",
+          "自動催促判定実行ボタン",
+          "自動返却扱い切り替え判定実行ボタン",
+          "催促対象案件フィルタ",
+          "返却扱い対象案件フィルタ",
+          "顧客連絡履歴一覧",
+          "連絡日時",
+          "連絡内容入力欄",
+          "連絡方法選択（電話・メール・その他）",
+          "連絡担当者表示",
+          "連絡結果記録ボタン"
+        ]
+      },
+      {
+        "id": "scr-1795168184932",
+        "name": "部品入荷・納期管理画面",
+        "purpose": "修理案件に関連する部品の入荷予定日を登録・更新し、納期連絡と遅延情報を一元管理する画面",
+        "items": [
+          "修理案件検索フィルター",
+          "修理案件一覧表",
+          "案件ステータス表示",
+          "顧客名表示",
+          "部品入荷予定日入力欄",
+          "部品入荷予定日更新ボタン",
+          "部品情報パネル",
+          "納期連絡記録入力欄",
+          "納期連絡日時ピッカー",
+          "納期連絡内容テキストエリア",
+          "納期連絡記録ボタン",
+          "遅延情報入力欄"
+        ]
+      },
+      {
+        "id": "scr-1795168194920",
+        "name": "修理完了・引き渡し処理画面",
+        "purpose": "修理案件の完了登録から引き取り完了、会計処理までの一連の業務を管理し、完了連絡日時の記録、保管料の自動計算、経過日数に基づく自動状態遷移（引き取り催促・保管料発生）、および最終的な引き渡し処理を実行する",
+        "items": [
+          "修理案件検索・一覧表示",
+          "修理案件詳細情報パネル",
+          "顧客情報表示",
+          "修理完了登録ボタン",
+          "完了連絡日時入力欄",
+          "引き取り期限自動計算・表示欄",
+          "保管料計算・表示パネル",
+          "経過日数自動判定表示",
+          "引き取り催促状態への自動更新ログ",
+          "保管料発生状態への自動更新ログ",
+          "見積情報表示",
+          "部品入荷状況確認"
+        ]
+      },
+      {
+        "id": "scr-1795168205706",
+        "name": "キャンセル・返却処理画面",
+        "purpose": "修理案件のキャンセルまたは返却処理を実行し、キャンセル料金を確認・計算して顧客に通知する",
+        "items": [
+          "修理案件検索・選択フィールド",
+          "案件基本情報表示エリア",
+          "顧客情報表示エリア",
+          "現在の案件状態表示",
+          "処理種別選択（キャンセル/返却）",
+          "キャンセル理由入力フィールド",
+          "キャンセル料金計算結果表示",
+          "見積金額の表示",
+          "適用される料金段階表示",
+          "計算根拠の詳細説明",
+          "返却予定日入力フィールド",
+          "返却方法選択（来店/配送等）"
+        ]
+      }
+    ],
+    "tableDefinitions": [
+      {
+        "tableName": "修理案件",
+        "purpose": "修理業務の案件情報を一元管理し、受付から完了までのライフサイクルを追跡する",
+        "columns": [
+          {
+            "name": "案件ID",
+            "type": "uuid",
+            "required": true,
+            "description": "修理案件の一意識別子"
+          },
+          {
+            "name": "案件番号",
+            "type": "varchar(100)",
+            "required": true,
+            "description": "ユーザーが参照する案件の管理番号"
+          },
+          {
+            "name": "顧客ID",
+            "type": "uuid",
+            "required": true,
+            "description": "修理依頼者の顧客マスタ参照ID"
+          },
+          {
+            "name": "顧客名",
+            "type": "varchar(100)",
+            "required": true,
+            "description": "修理依頼者の名前"
+          },
+          {
+            "name": "連絡先電話番号",
+            "type": "varchar(100)",
+            "required": false,
+            "description": "顧客の連絡先電話番号"
+          },
+          {
+            "name": "連絡先メールアドレス",
+            "type": "varchar(100)",
+            "required": false,
+            "description": "顧客の連絡先メールアドレス"
+          },
+          {
+            "name": "修理対象品目",
+            "type": "varchar(100)",
+            "required": true,
+            "description": "修理対象となる製品やアイテムの名称"
+          },
+          {
+            "name": "修理内容",
+            "type": "text",
+            "required": true,
+            "description": "修理の詳細内容と不具合の説明"
+          },
+          {
+            "name": "受付日時",
+            "type": "timestamp",
+            "required": true,
+            "description": "修理案件の受付日時"
+          },
+          {
+            "name": "希望完了日",
+            "type": "timestamp",
+            "required": false,
+            "description": "顧客が希望する修理完了予定日"
+          },
+          {
+            "name": "ステータス",
+            "type": "varchar(100)",
+            "required": true,
+            "description": "案件の現在状態(受付、診断中、修理中、完了、キャンセル等)"
+          },
+          {
+            "name": "優先度",
+            "type": "varchar(100)",
+            "required": false,
+            "description": "修理案件の優先度(高、中、低等)"
+          },
+          {
+            "name": "担当者ID",
+            "type": "uuid",
+            "required": false,
+            "description": "修理を担当する従業員のID"
+          },
+          {
+            "name": "見積金額",
+            "type": "integer",
+            "required": false,
+            "description": "修理の見積金額(円)"
+          },
+          {
+            "name": "実績金額",
+            "type": "integer",
+            "required": false,
+            "description": "修理の実績金額(円)"
+          },
+          {
+            "name": "完了日時",
+            "type": "timestamp",
+            "required": false,
+            "description": "修理完了日時"
+          },
+          {
+            "name": "備考",
+            "type": "text",
+            "required": false,
+            "description": "修理案件に関する追加情報や特記事項"
+          },
+          {
+            "name": "作成日時",
+            "type": "timestamp",
+            "required": true,
+            "description": "レコード作成日時"
+          },
+          {
+            "name": "作成者ID",
+            "type": "uuid",
+            "required": true,
+            "description": "レコード作成者のユーザーID"
+          },
+          {
+            "name": "更新日時",
+            "type": "timestamp",
+            "required": true,
+            "description": "レコード最終更新日時"
+          },
+          {
+            "name": "更新者ID",
+            "type": "uuid",
+            "required": true,
+            "description": "レコード最終更新者のユーザーID"
+          }
+        ]
+      },
+      {
+        "tableName": "顧客",
+        "purpose": "修理業務管理システムにおける顧客情報の一元管理。修理案件の顧客情報参照、請求先情報、連絡先管理を支援する。",
+        "columns": [
+          {
+            "name": "顧客ID",
+            "type": "uuid",
+            "required": true,
+            "description": "顧客を一意に識別するプライマリキー"
+          },
+          {
+            "name": "顧客名",
+            "type": "varchar(100)",
+            "required": true,
+            "description": "顧客の名前または企業名"
+          },
+          {
+            "name": "顧客名カナ",
+            "type": "varchar(100)",
+            "required": false,
+            "description": "顧客名のカナ表記、検索用"
+          },
+          {
+            "name": "電話番号",
+            "type": "varchar(100)",
+            "required": false,
+            "description": "顧客の連絡先電話番号"
+          },
+          {
+            "name": "メールアドレス",
+            "type": "varchar(100)",
+            "required": false,
+            "description": "顧客のメールアドレス"
+          },
+          {
+            "name": "住所",
+            "type": "text",
+            "required": false,
+            "description": "顧客の住所"
+          },
+          {
+            "name": "請求先住所",
+            "type": "text",
+            "required": false,
+            "description": "請求書送付先住所、住所と異なる場合に使用"
+          },
+          {
+            "name": "顧客区分",
+            "type": "varchar(100)",
+            "required": false,
+            "description": "個人/法人などの顧客区分"
+          },
+          {
+            "name": "備考",
+            "type": "text",
+            "required": false,
+            "description": "顧客に関する特記事項"
+          },
+          {
+            "name": "作成日時",
+            "type": "timestamp",
+            "required": true,
+            "description": "顧客レコード作成日時"
+          },
+          {
+            "name": "更新日時",
+            "type": "timestamp",
+            "required": true,
+            "description": "顧客レコード最終更新日時"
+          },
+          {
+            "name": "作成者",
+            "type": "varchar(100)",
+            "required": false,
+            "description": "顧客レコード作成者のユーザーID"
+          },
+          {
+            "name": "更新者",
+            "type": "varchar(100)",
+            "required": false,
+            "description": "顧客レコード最終更新者のユーザーID"
+          }
+        ]
+      },
+      {
+        "tableName": "修理案件状態遷移履歴",
+        "purpose": "修理案件の状態変更履歴を記録し、案件の進捗状況の追跡と監査証跡を管理するテーブル",
+        "columns": [
+          {
+            "name": "状態遷移履歴ID",
+            "type": "uuid",
+            "required": true,
+            "description": "状態遷移履歴レコードの一意識別子"
+          },
+          {
+            "name": "修理案件ID",
+            "type": "uuid",
+            "required": true,
+            "description": "修理案件テーブルへの外部キー参照"
+          },
+          {
+            "name": "変更前状態",
+            "type": "varchar(100)",
+            "required": true,
+            "description": "状態変更前の修理案件の状態値"
+          },
+          {
+            "name": "変更後状態",
+            "type": "varchar(100)",
+            "required": true,
+            "description": "状態変更後の修理案件の状態値"
+          },
+          {
+            "name": "変更理由",
+            "type": "text",
+            "required": false,
+            "description": "状態変更の理由や備考"
+          },
+          {
+            "name": "作成日時",
+            "type": "timestamp",
+            "required": true,
+            "description": "状態遷移が発生した日時"
+          },
+          {
+            "name": "作成者",
+            "type": "varchar(100)",
+            "required": true,
+            "description": "状態変更を実施したユーザーまたはシステムの識別子"
+          }
+        ]
+      },
+      {
+        "tableName": "見積情報",
+        "purpose": "修理案件に対する見積内容を管理し、作業内容、費用、有効期限などを記録するテーブル",
+        "columns": [
+          {
+            "name": "見積ID",
+            "type": "uuid",
+            "required": true,
+            "description": "見積情報の一意識別子"
+          },
+          {
+            "name": "修理案件ID",
+            "type": "uuid",
+            "required": true,
+            "description": "関連する修理案件への外部キー"
+          },
+          {
+            "name": "見積番号",
+            "type": "varchar(100)",
+            "required": true,
+            "description": "見積書の番号（顧客向け表示用）"
+          },
+          {
+            "name": "見積日",
+            "type": "timestamp",
+            "required": true,
+            "description": "見積を作成した日時"
+          },
+          {
+            "name": "有効期限",
+            "type": "timestamp",
+            "required": true,
+            "description": "見積の有効期限"
+          },
+          {
+            "name": "見積内容",
+            "type": "text",
+            "required": true,
+            "description": "修理内容の詳細説明"
+          },
+          {
+            "name": "材料費",
+            "type": "integer",
+            "required": true,
+            "description": "見積の材料費（円）"
+          },
+          {
+            "name": "作業費",
+            "type": "integer",
+            "required": true,
+            "description": "見積の作業費（円）"
+          },
+          {
+            "name": "合計金額",
+            "type": "integer",
+            "required": true,
+            "description": "見積の合計金額（円）"
+          },
+          {
+            "name": "消費税",
+            "type": "integer",
+            "required": false,
+            "description": "見積の消費税額（円）"
+          },
+          {
+            "name": "税込合計",
+            "type": "integer",
+            "required": false,
+            "description": "見積の税込合計金額（円）"
+          },
+          {
+            "name": "備考",
+            "type": "text",
+            "required": false,
+            "description": "見積に関する備考や特記事項"
+          },
+          {
+            "name": "作成日時",
+            "type": "timestamp",
+            "required": true,
+            "description": "見積情報をシステムに登録した日時"
+          },
+          {
+            "name": "更新日時",
+            "type": "timestamp",
+            "required": true,
+            "description": "見積情報を最後に更新した日時"
+          },
+          {
+            "name": "作成者",
+            "type": "varchar(100)",
+            "required": true,
+            "description": "見積を作成したユーザー"
+          }
+        ]
+      },
+      {
+        "tableName": "部品",
+        "purpose": "修理業務で使用する部品のマスタ情報を管理し、修理案件での部品使用履歴と在庫状況を追跡する",
+        "columns": [
+          {
+            "name": "部品ID",
+            "type": "uuid",
+            "required": true,
+            "description": "部品を一意に識別するプライマリキー"
+          },
+          {
+            "name": "部品コード",
+            "type": "varchar(100)",
+            "required": true,
+            "description": "部品の業務用コード、ユーザーが検索・参照する際に使用"
+          },
+          {
+            "name": "部品名",
+            "type": "varchar(100)",
+            "required": true,
+            "description": "部品の名称"
+          },
+          {
+            "name": "部品説明",
+            "type": "text",
+            "required": false,
+            "description": "部品の詳細説明、仕様、用途等"
+          },
+          {
+            "name": "単価",
+            "type": "integer",
+            "required": true,
+            "description": "部品の単価（円）、見積情報や請求に使用"
+          },
+          {
+            "name": "在庫数",
+            "type": "integer",
+            "required": true,
+            "description": "現在の在庫数量"
+          },
+          {
+            "name": "最小在庫数",
+            "type": "integer",
+            "required": false,
+            "description": "発注の目安となる最小在庫数"
+          },
+          {
+            "name": "仕入先",
+            "type": "varchar(100)",
+            "required": false,
+            "description": "部品の仕入先企業名"
+          },
+          {
+            "name": "カテゴリ",
+            "type": "varchar(100)",
+            "required": false,
+            "description": "部品の分類カテゴリ"
+          },
+          {
+            "name": "有効フラグ",
+            "type": "boolean",
+            "required": true,
+            "description": "部品が使用可能かどうか、廃止部品の論理削除に使用"
+          },
+          {
+            "name": "作成日時",
+            "type": "timestamp",
+            "required": true,
+            "description": "部品マスタが作成された日時"
+          },
+          {
+            "name": "更新日時",
+            "type": "timestamp",
+            "required": true,
+            "description": "部品マスタが最後に更新された日時"
+          },
+          {
+            "name": "作成者",
+            "type": "varchar(100)",
+            "required": false,
+            "description": "部品マスタを作成したユーザー"
+          },
+          {
+            "name": "更新者",
+            "type": "varchar(100)",
+            "required": false,
+            "description": "部品マスタを最後に更新したユーザー"
+          }
+        ]
+      },
+      {
+        "tableName": "部品入荷予定",
+        "purpose": "修理業務に必要な部品の入荷予定を管理し、部品の到着予定日、数量、仕入先情報を追跡するテーブル",
+        "columns": [
+          {
+            "name": "入荷予定ID",
+            "type": "uuid",
+            "required": true,
+            "description": "入荷予定の一意識別子"
+          },
+          {
+            "name": "部品ID",
+            "type": "uuid",
+            "required": true,
+            "description": "部品テーブルへの外部キー"
+          },
+          {
+            "name": "修理案件ID",
+            "type": "uuid",
+            "required": false,
+            "description": "関連する修理案件への外部キー"
+          },
+          {
+            "name": "予定入荷日",
+            "type": "timestamp",
+            "required": true,
+            "description": "部品の予定入荷日時"
+          },
+          {
+            "name": "入荷数量",
+            "type": "integer",
+            "required": true,
+            "description": "入荷予定の部品数量"
+          },
+          {
+            "name": "仕入先",
+            "type": "varchar(100)",
+            "required": true,
+            "description": "部品の仕入先企業名"
+          },
+          {
+            "name": "発注番号",
+            "type": "varchar(100)",
+            "required": false,
+            "description": "仕入先での発注番号"
+          },
+          {
+            "name": "ステータス",
+            "type": "varchar(100)",
+            "required": true,
+            "description": "入荷予定のステータス（未発注、発注済、発送済、入荷完了等）"
+          },
+          {
+            "name": "備考",
+            "type": "text",
+            "required": false,
+            "description": "入荷予定に関する備考"
+          },
+          {
+            "name": "作成日時",
+            "type": "timestamp",
+            "required": true,
+            "description": "レコード作成日時"
+          },
+          {
+            "name": "更新日時",
+            "type": "timestamp",
+            "required": true,
+            "description": "レコード最終更新日時"
+          },
+          {
+            "name": "作成者",
+            "type": "varchar(100)",
+            "required": true,
+            "description": "レコード作成者"
+          }
+        ]
+      },
+      {
+        "tableName": "顧客連絡履歴",
+        "purpose": "顧客との連絡内容、日時、方法、対応者を記録し、顧客対応の履歴管理と修理案件の進捗状況の把握に利用する",
+        "columns": [
+          {
+            "name": "連絡履歴ID",
+            "type": "uuid",
+            "required": true,
+            "description": "連絡履歴の一意識別子"
+          },
+          {
+            "name": "顧客ID",
+            "type": "uuid",
+            "required": true,
+            "description": "連絡対象の顧客を特定するための外部キー"
+          },
+          {
+            "name": "修理案件ID",
+            "type": "uuid",
+            "required": false,
+            "description": "関連する修理案件がある場合の外部キー"
+          },
+          {
+            "name": "連絡日時",
+            "type": "timestamp",
+            "required": true,
+            "description": "顧客との連絡が発生した日時"
+          },
+          {
+            "name": "連絡方法",
+            "type": "varchar(100)",
+            "required": true,
+            "description": "連絡手段（電話、メール、SMS、来店等）"
+          },
+          {
+            "name": "連絡内容",
+            "type": "text",
+            "required": true,
+            "description": "顧客との連絡内容の詳細"
+          },
+          {
+            "name": "対応者",
+            "type": "varchar(100)",
+            "required": true,
+            "description": "連絡対応を行った従業員名またはID"
+          },
+          {
+            "name": "次回連絡予定日",
+            "type": "timestamp",
+            "required": false,
+            "description": "フォローアップが必要な場合の次回連絡予定日時"
+          },
+          {
+            "name": "作成日時",
+            "type": "timestamp",
+            "required": true,
+            "description": "連絡履歴レコードが作成された日時"
+          },
+          {
+            "name": "更新日時",
+            "type": "timestamp",
+            "required": true,
+            "description": "連絡履歴レコードが最後に更新された日時"
+          }
+        ]
+      },
+      {
+        "tableName": "ログインユーザー",
+        "purpose": "修理業務管理システムのユーザー認証・認可を管理し、ログイン情報と権限情報を保持する",
+        "columns": [
+          {
+            "name": "ユーザーID",
+            "type": "uuid",
+            "required": true,
+            "description": "ユーザーの一意識別子"
+          },
+          {
+            "name": "ログインID",
+            "type": "varchar(100)",
+            "required": true,
+            "description": "ログイン時に使用するユーザー名またはメールアドレス"
+          },
+          {
+            "name": "パスワードハッシュ",
+            "type": "varchar(100)",
+            "required": true,
+            "description": "ハッシュ化されたパスワード"
+          },
+          {
+            "name": "ユーザー名",
+            "type": "varchar(100)",
+            "required": true,
+            "description": "ユーザーの表示名"
+          },
+          {
+            "name": "メールアドレス",
+            "type": "varchar(100)",
+            "required": true,
+            "description": "ユーザーのメールアドレス"
+          },
+          {
+            "name": "役割",
+            "type": "varchar(100)",
+            "required": true,
+            "description": "ユーザーの役割（管理者、修理担当者、営業など）"
+          },
+          {
+            "name": "有効フラグ",
+            "type": "boolean",
+            "required": true,
+            "description": "ユーザーが有効かどうか"
+          },
+          {
+            "name": "最終ログイン日時",
+            "type": "timestamp",
+            "required": false,
+            "description": "最後にログインした日時"
+          },
+          {
+            "name": "作成日時",
+            "type": "timestamp",
+            "required": true,
+            "description": "ユーザーレコード作成日時"
+          },
+          {
+            "name": "更新日時",
+            "type": "timestamp",
+            "required": true,
+            "description": "ユーザーレコード最終更新日時"
+          },
+          {
+            "name": "作成者",
+            "type": "varchar(100)",
+            "required": true,
+            "description": "ユーザーレコード作成者"
+          }
+        ]
+      },
+      {
+        "tableName": "ユーザー権限",
+        "purpose": "修理業務管理システムにおけるユーザーのロールベースアクセス制御を管理し、各ユーザーが実行可能な操作と閲覧可能なデータを制御する。",
+        "columns": [
+          {
+            "name": "ユーザー権限ID",
+            "type": "uuid",
+            "required": true,
+            "description": "ユーザー権限レコードの一意識別子"
+          },
+          {
+            "name": "ユーザーID",
+            "type": "uuid",
+            "required": true,
+            "description": "ログインユーザーテーブルへの外部キー参照"
+          },
+          {
+            "name": "権限コード",
+            "type": "varchar(100)",
+            "required": true,
+            "description": "権限を識別するコード（例：ADMIN、TECHNICIAN、CUSTOMER_SERVICE、VIEWER）"
+          },
+          {
+            "name": "権限名",
+            "type": "varchar(100)",
+            "required": true,
+            "description": "権限の日本語表示名"
+          },
+          {
+            "name": "説明",
+            "type": "text",
+            "required": false,
+            "description": "権限の詳細説明"
+          },
+          {
+            "name": "有効フラグ",
+            "type": "boolean",
+            "required": true,
+            "description": "この権限が有効かどうかを示すフラグ"
+          },
+          {
+            "name": "作成日時",
+            "type": "timestamp",
+            "required": true,
+            "description": "ユーザー権限レコードの作成日時"
+          },
+          {
+            "name": "更新日時",
+            "type": "timestamp",
+            "required": true,
+            "description": "ユーザー権限レコードの最終更新日時"
+          },
+          {
+            "name": "作成者",
+            "type": "uuid",
+            "required": true,
+            "description": "ユーザー権限を作成したユーザーID"
+          },
+          {
+            "name": "更新者",
+            "type": "uuid",
+            "required": true,
+            "description": "ユーザー権限を最後に更新したユーザーID"
+          }
+        ]
+      },
+      {
+        "tableName": "状態マスタ",
+        "purpose": "修理案件の状態を定義・管理するマスタテーブル。修理案件が遷移可能な状態を一元管理し、状態遷移履歴の参照先となる。",
+        "columns": [
+          {
+            "name": "状態ID",
+            "type": "uuid",
+            "required": true,
+            "description": "状態マスタの一意識別子。主キー。"
+          },
+          {
+            "name": "状態コード",
+            "type": "varchar(100)",
+            "required": true,
+            "description": "状態を識別するコード。例：受付、診断中、見積待ち、修理中、完了、キャンセル等。ユニーク制約あり。"
+          },
+          {
+            "name": "状態名",
+            "type": "varchar(100)",
+            "required": true,
+            "description": "状態の日本語表示名。UI表示用。"
+          },
+          {
+            "name": "説明",
+            "type": "text",
+            "required": false,
+            "description": "状態の詳細説明。業務ルールや遷移条件の補足情報。"
+          },
+          {
+            "name": "表示順序",
+            "type": "integer",
+            "required": true,
+            "description": "UI表示時のソート順序。"
+          },
+          {
+            "name": "有効フラグ",
+            "type": "boolean",
+            "required": true,
+            "description": "状態が有効かどうか。無効な状態は新規案件に使用不可。"
+          },
+          {
+            "name": "作成日時",
+            "type": "timestamp",
+            "required": true,
+            "description": "レコード作成日時。"
+          },
+          {
+            "name": "更新日時",
+            "type": "timestamp",
+            "required": true,
+            "description": "レコード最終更新日時。"
+          },
+          {
+            "name": "作成者",
+            "type": "uuid",
+            "required": true,
+            "description": "レコード作成者のユーザーID。ログインユーザーテーブルへの外部キー。"
+          },
+          {
+            "name": "更新者",
+            "type": "uuid",
+            "required": true,
+            "description": "レコード最終更新者のユーザーID。ログインユーザーテーブルへの外部キー。"
+          }
+        ]
+      },
+      {
+        "tableName": "見積金額段階設定",
+        "purpose": "修理案件の見積金額を段階的に管理し、金額帯ごとの承認ルールや手数料設定を定義するマスタテーブル",
+        "columns": [
+          {
+            "name": "見積金額段階設定ID",
+            "type": "uuid",
+            "required": true,
+            "description": "見積金額段階設定の一意識別子"
+          },
+          {
+            "name": "段階名",
+            "type": "varchar(100)",
+            "required": true,
+            "description": "金額段階の名称（例：小額修理、中額修理、高額修理）"
+          },
+          {
+            "name": "最小金額",
+            "type": "integer",
+            "required": true,
+            "description": "この段階の最小見積金額（円）"
+          },
+          {
+            "name": "最大金額",
+            "type": "integer",
+            "required": true,
+            "description": "この段階の最大見積金額（円）"
+          },
+          {
+            "name": "承認者権限レベル",
+            "type": "varchar(100)",
+            "required": true,
+            "description": "この金額段階の見積を承認できるユーザー権限レベル"
+          },
+          {
+            "name": "手数料率",
+            "type": "integer",
+            "required": false,
+            "description": "この段階に適用される手数料率（パーセンテージ）"
+          },
+          {
+            "name": "備考",
+            "type": "text",
+            "required": false,
+            "description": "この金額段階に関する補足情報"
+          },
+          {
+            "name": "有効フラグ",
+            "type": "boolean",
+            "required": true,
+            "description": "この段階設定が有効かどうか"
+          },
+          {
+            "name": "作成日時",
+            "type": "timestamp",
+            "required": true,
+            "description": "レコード作成日時"
+          },
+          {
+            "name": "更新日時",
+            "type": "timestamp",
+            "required": true,
+            "description": "レコード最終更新日時"
+          },
+          {
+            "name": "作成者",
+            "type": "uuid",
+            "required": true,
+            "description": "レコード作成者のユーザーID"
+          },
+          {
+            "name": "更新者",
+            "type": "uuid",
+            "required": true,
+            "description": "レコード最終更新者のユーザーID"
+          }
+        ]
+      },
+      {
+        "tableName": "自動催促設定",
+        "purpose": "修理案件の進捗状況に基づいて自動的に顧客への催促を実行するための設定を管理するテーブル",
+        "columns": [
+          {
+            "name": "自動催促設定ID",
+            "type": "uuid",
+            "required": true,
+            "description": "自動催促設定の一意識別子"
+          },
+          {
+            "name": "設定名",
+            "type": "varchar(100)",
+            "required": true,
+            "description": "催促設定の名称"
+          },
+          {
+            "name": "対象状態ID",
+            "type": "uuid",
+            "required": true,
+            "description": "催促対象となる修理案件状態を示す状態マスタへの外部キー"
+          },
+          {
+            "name": "催促トリガー日数",
+            "type": "integer",
+            "required": true,
+            "description": "対象状態に遷移してから催促を実行するまでの日数"
+          },
+          {
+            "name": "催促方法",
+            "type": "varchar(100)",
+            "required": true,
+            "description": "催促の方法（メール、電話、SMS等）"
+          },
+          {
+            "name": "催促メッセージテンプレート",
+            "type": "text",
+            "required": false,
+            "description": "催促時に使用するメッセージテンプレート"
+          },
+          {
+            "name": "最大催促回数",
+            "type": "integer",
+            "required": true,
+            "description": "同一案件に対する最大催促回数"
+          },
+          {
+            "name": "催促間隔日数",
+            "type": "integer",
+            "required": true,
+            "description": "複数回催促する場合の催促間隔（日数）"
+          },
+          {
+            "name": "有効フラグ",
+            "type": "boolean",
+            "required": true,
+            "description": "この設定が有効かどうかを示すフラグ"
+          },
+          {
+            "name": "作成日時",
+            "type": "timestamp",
+            "required": true,
+            "description": "設定が作成された日時"
+          },
+          {
+            "name": "更新日時",
+            "type": "timestamp",
+            "required": true,
+            "description": "設定が最後に更新された日時"
+          },
+          {
+            "name": "作成者",
+            "type": "uuid",
+            "required": true,
+            "description": "設定を作成したログインユーザーへの外部キー"
+          },
+          {
+            "name": "更新者",
+            "type": "uuid",
+            "required": true,
+            "description": "設定を最後に更新したログインユーザーへの外部キー"
+          }
+        ]
+      }
+    ]
+  }
+]

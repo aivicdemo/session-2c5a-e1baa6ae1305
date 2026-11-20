@@ -1,0 +1,697 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>みなと修理カルテ</title>
+  <style>
+:root {
+  --primary: #c85a3a;
+  --primary-hover: #a84830;
+  --bg-main: #f4ede5;
+  --bg-card: #ebe2d9;
+  --bg-sidebar: #e5dcd2;
+  --border: #d4c9bd;
+  --text: #2a2420;
+  --text-muted: #6b6460;
+  --top-bar-bg: #8b6f47;
+  --top-bar-border: #7a6040;
+  --top-bar-text: #fef9f3;
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --radius-card: 12px;
+  --radius-control: 8px;
+  --shadow-card: 0 2px 8px rgba(42, 36, 32, 0.08);
+  --border-width: 1px;
+  --control-height: 56px;
+  --space-unit: 8px;
+  --motion-duration: 200ms;
+  --surface-texture: repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(42, 36, 32, 0.02) 2px, rgba(42, 36, 32, 0.02) 4px), repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(42, 36, 32, 0.01) 2px, rgba(42, 36, 32, 0.01) 4px);
+  --surface-texture-size: 100% 100%;
+  --surface-texture-position: 0 0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--font-family);
+  color: var(--text);
+  background: var(--bg-main);
+  background-image: var(--surface-texture);
+  background-size: var(--surface-texture-size);
+  background-position: var(--surface-texture-position);
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+.shell-wrapper {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+header.top-bar {
+  background: var(--top-bar-bg);
+  border-bottom: var(--border-width) solid var(--top-bar-border);
+  padding: calc(var(--space-unit) * 2) calc(var(--space-unit) * 3);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  height: 64px;
+}
+
+.top-bar-left {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--space-unit) * 3);
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--top-bar-text);
+  letter-spacing: 0.5px;
+}
+
+.logo-sub {
+  font-size: 12px;
+  color: rgba(254, 249, 243, 0.8);
+  margin-top: 2px;
+}
+
+.top-bar-right {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--space-unit) * 2);
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.user-name {
+  color: var(--top-bar-text);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.logout-link {
+  color: var(--top-bar-text);
+  font-size: 13px;
+  text-decoration: none;
+  opacity: 0.9;
+  transition: opacity var(--motion-duration);
+}
+
+.logout-link:hover {
+  opacity: 1;
+}
+
+aside.sidebar {
+  width: 240px;
+  background: var(--bg-sidebar);
+  border-right: var(--border-width) solid var(--border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.sidebar-header {
+  padding: calc(var(--space-unit) * 3) calc(var(--space-unit) * 2);
+  border-bottom: var(--border-width) solid var(--border);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
+
+nav.sidebar-nav {
+  flex: 1;
+  padding: calc(var(--space-unit) * 2) 0;
+}
+
+.nav-section {
+  margin-bottom: calc(var(--space-unit) * 2);
+}
+
+.nav-section-title {
+  padding: calc(var(--space-unit) * 1.5) calc(var(--space-unit) * 2);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
+
+.nav-item {
+  display: block;
+  padding: calc(var(--space-unit) * 2) calc(var(--space-unit) * 2);
+  color: var(--text);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: background-color var(--motion-duration), color var(--motion-duration);
+  border-left: 3px solid transparent;
+  margin: 0 calc(var(--space-unit) * 0.5);
+  margin-left: 0;
+}
+
+.nav-item:hover {
+  background-color: rgba(200, 90, 58, 0.08);
+  color: var(--primary);
+}
+
+.nav-item.aivic-active {
+  background-color: rgba(200, 90, 58, 0.12);
+  color: var(--primary);
+  border-left-color: var(--primary);
+  font-weight: 600;
+}
+
+main.content-area {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+[data-aivic-panel] {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.shell-wrapper[data-aivic-shell-pattern="sidebar"][data-aivic-nav-position="left"][data-aivic-density="balanced"] {
+  /* Confirmed pattern */
+}
+
+button, input[type="button"], input[type="submit"] {
+  font-family: var(--font-family);
+  font-size: 16px;
+  font-weight: 600;
+  height: var(--control-height);
+  padding: 0 calc(var(--space-unit) * 3);
+  border: var(--border-width) solid transparent;
+  border-radius: var(--radius-control);
+  cursor: pointer;
+  transition: all var(--motion-duration);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+button.btn-primary {
+  background: var(--primary);
+  color: white;
+}
+
+button.btn-primary:hover {
+  background: var(--primary-hover);
+}
+
+button.btn-secondary {
+  background: var(--bg-card);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+button.btn-secondary:hover {
+  background: var(--border);
+}
+
+input[type="text"], input[type="email"], input[type="tel"], input[type="date"], input[type="time"], textarea, select {
+  font-family: var(--font-family);
+  font-size: 16px;
+  padding: calc(var(--space-unit) * 1.5) calc(var(--space-unit) * 2);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-control);
+  background: white;
+  color: var(--text);
+  transition: border-color var(--motion-duration);
+}
+
+input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus, input[type="date"]:focus, input[type="time"]:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(200, 90, 58, 0.1);
+}
+
+textarea {
+  resize: vertical;
+  line-height: 1.6;
+}
+
+select {
+  cursor: pointer;
+}
+
+.card {
+  background: var(--bg-card);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-card);
+  padding: calc(var(--space-unit) * 3);
+  box-shadow: var(--shadow-card);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--space-unit) * 0.75) calc(var(--space-unit) * 1.5);
+  border-radius: var(--radius-control);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.badge-status-pending {
+  background: rgba(200, 90, 58, 0.15);
+  color: var(--primary);
+}
+
+.badge-status-parts {
+  background: rgba(217, 126, 58, 0.15);
+  color: #d97e3a;
+}
+
+.badge-status-working {
+  background: rgba(74, 124, 158, 0.15);
+  color: #4a7c9e;
+}
+
+.badge-status-complete {
+  background: rgba(107, 142, 90, 0.15);
+  color: #6b8e5a;
+}
+
+.badge-status-other {
+  background: rgba(155, 139, 126, 0.15);
+  color: #9b8b7e;
+}
+
+@media (max-width: 768px) {
+  aside.sidebar {
+    width: 200px;
+  }
+  
+  .top-bar {
+    padding: calc(var(--space-unit) * 1.5) calc(var(--space-unit) * 2);
+    height: 56px;
+  }
+  
+  .logo {
+    font-size: 16px;
+  }
+  
+  .user-avatar {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+}
+
+  </style>
+<script>
+window.AIVIC_API_URL = "https://jqykrkgdvngp7qvmavufg5tohq0xwdzb.lambda-url.us-east-1.on.aws/";
+window.AIVIC_APP_ID = "session-2c5aab4a-855e-4614-ab54-f90fc45f8ae4";
+window.AIVIC_SYSTEM_NAME = "修理業務管理システム";
+window.AIVIC_TABLES = [{"tableName":"修理案件","purpose":"修理業務の案件情報を一元管理し、受付から完了までのライフサイクルを追跡する","columns":[{"name":"案件ID","type":"uuid","required":true,"description":"修理案件の一意識別子"},{"name":"案件番号","type":"varchar(100)","required":true,"description":"ユーザーが参照する案件の管理番号"},{"name":"顧客ID","type":"uuid","required":true,"description":"修理依頼者の顧客マスタ参照ID"},{"name":"顧客名","type":"varchar(100)","required":true,"description":"修理依頼者の名前"},{"name":"連絡先電話番号","type":"varchar(100)","required":false,"description":"顧客の連絡先電話番号"},{"name":"連絡先メールアドレス","type":"varchar(100)","required":false,"description":"顧客の連絡先メールアドレス"},{"name":"修理対象品目","type":"varchar(100)","required":true,"description":"修理対象となる製品やアイテムの名称"},{"name":"修理内容","type":"text","required":true,"description":"修理の詳細内容と不具合の説明"},{"name":"受付日時","type":"timestamp","required":true,"description":"修理案件の受付日時"},{"name":"希望完了日","type":"timestamp","required":false,"description":"顧客が希望する修理完了予定日"},{"name":"ステータス","type":"varchar(100)","required":true,"description":"案件の現在状態(受付、診断中、修理中、完了、キャンセル等)"},{"name":"優先度","type":"varchar(100)","required":false,"description":"修理案件の優先度(高、中、低等)"},{"name":"担当者ID","type":"uuid","required":false,"description":"修理を担当する従業員のID"},{"name":"見積金額","type":"integer","required":false,"description":"修理の見積金額(円)"},{"name":"実績金額","type":"integer","required":false,"description":"修理の実績金額(円)"},{"name":"完了日時","type":"timestamp","required":false,"description":"修理完了日時"},{"name":"備考","type":"text","required":false,"description":"修理案件に関する追加情報や特記事項"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"作成者ID","type":"uuid","required":true,"description":"レコード作成者のユーザーID"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"更新者ID","type":"uuid","required":true,"description":"レコード最終更新者のユーザーID"}]},{"tableName":"顧客","purpose":"修理業務管理システムにおける顧客情報の一元管理。修理案件の顧客情報参照、請求先情報、連絡先管理を支援する。","columns":[{"name":"顧客ID","type":"uuid","required":true,"description":"顧客を一意に識別するプライマリキー"},{"name":"顧客名","type":"varchar(100)","required":true,"description":"顧客の名前または企業名"},{"name":"顧客名カナ","type":"varchar(100)","required":false,"description":"顧客名のカナ表記、検索用"},{"name":"電話番号","type":"varchar(100)","required":false,"description":"顧客の連絡先電話番号"},{"name":"メールアドレス","type":"varchar(100)","required":false,"description":"顧客のメールアドレス"},{"name":"住所","type":"text","required":false,"description":"顧客の住所"},{"name":"請求先住所","type":"text","required":false,"description":"請求書送付先住所、住所と異なる場合に使用"},{"name":"顧客区分","type":"varchar(100)","required":false,"description":"個人/法人などの顧客区分"},{"name":"備考","type":"text","required":false,"description":"顧客に関する特記事項"},{"name":"作成日時","type":"timestamp","required":true,"description":"顧客レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"顧客レコード最終更新日時"},{"name":"作成者","type":"varchar(100)","required":false,"description":"顧客レコード作成者のユーザーID"},{"name":"更新者","type":"varchar(100)","required":false,"description":"顧客レコード最終更新者のユーザーID"}]},{"tableName":"修理案件状態遷移履歴","purpose":"修理案件の状態変更履歴を記録し、案件の進捗状況の追跡と監査証跡を管理するテーブル","columns":[{"name":"状態遷移履歴ID","type":"uuid","required":true,"description":"状態遷移履歴レコードの一意識別子"},{"name":"修理案件ID","type":"uuid","required":true,"description":"修理案件テーブルへの外部キー参照"},{"name":"変更前状態","type":"varchar(100)","required":true,"description":"状態変更前の修理案件の状態値"},{"name":"変更後状態","type":"varchar(100)","required":true,"description":"状態変更後の修理案件の状態値"},{"name":"変更理由","type":"text","required":false,"description":"状態変更の理由や備考"},{"name":"作成日時","type":"timestamp","required":true,"description":"状態遷移が発生した日時"},{"name":"作成者","type":"varchar(100)","required":true,"description":"状態変更を実施したユーザーまたはシステムの識別子"}]},{"tableName":"見積情報","purpose":"修理案件に対する見積内容を管理し、作業内容、費用、有効期限などを記録するテーブル","columns":[{"name":"見積ID","type":"uuid","required":true,"description":"見積情報の一意識別子"},{"name":"修理案件ID","type":"uuid","required":true,"description":"関連する修理案件への外部キー"},{"name":"見積番号","type":"varchar(100)","required":true,"description":"見積書の番号（顧客向け表示用）"},{"name":"見積日","type":"timestamp","required":true,"description":"見積を作成した日時"},{"name":"有効期限","type":"timestamp","required":true,"description":"見積の有効期限"},{"name":"見積内容","type":"text","required":true,"description":"修理内容の詳細説明"},{"name":"材料費","type":"integer","required":true,"description":"見積の材料費（円）"},{"name":"作業費","type":"integer","required":true,"description":"見積の作業費（円）"},{"name":"合計金額","type":"integer","required":true,"description":"見積の合計金額（円）"},{"name":"消費税","type":"integer","required":false,"description":"見積の消費税額（円）"},{"name":"税込合計","type":"integer","required":false,"description":"見積の税込合計金額（円）"},{"name":"備考","type":"text","required":false,"description":"見積に関する備考や特記事項"},{"name":"作成日時","type":"timestamp","required":true,"description":"見積情報をシステムに登録した日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"見積情報を最後に更新した日時"},{"name":"作成者","type":"varchar(100)","required":true,"description":"見積を作成したユーザー"}]},{"tableName":"部品","purpose":"修理業務で使用する部品のマスタ情報を管理し、修理案件での部品使用履歴と在庫状況を追跡する","columns":[{"name":"部品ID","type":"uuid","required":true,"description":"部品を一意に識別するプライマリキー"},{"name":"部品コード","type":"varchar(100)","required":true,"description":"部品の業務用コード、ユーザーが検索・参照する際に使用"},{"name":"部品名","type":"varchar(100)","required":true,"description":"部品の名称"},{"name":"部品説明","type":"text","required":false,"description":"部品の詳細説明、仕様、用途等"},{"name":"単価","type":"integer","required":true,"description":"部品の単価（円）、見積情報や請求に使用"},{"name":"在庫数","type":"integer","required":true,"description":"現在の在庫数量"},{"name":"最小在庫数","type":"integer","required":false,"description":"発注の目安となる最小在庫数"},{"name":"仕入先","type":"varchar(100)","required":false,"description":"部品の仕入先企業名"},{"name":"カテゴリ","type":"varchar(100)","required":false,"description":"部品の分類カテゴリ"},{"name":"有効フラグ","type":"boolean","required":true,"description":"部品が使用可能かどうか、廃止部品の論理削除に使用"},{"name":"作成日時","type":"timestamp","required":true,"description":"部品マスタが作成された日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"部品マスタが最後に更新された日時"},{"name":"作成者","type":"varchar(100)","required":false,"description":"部品マスタを作成したユーザー"},{"name":"更新者","type":"varchar(100)","required":false,"description":"部品マスタを最後に更新したユーザー"}]},{"tableName":"部品入荷予定","purpose":"修理業務に必要な部品の入荷予定を管理し、部品の到着予定日、数量、仕入先情報を追跡するテーブル","columns":[{"name":"入荷予定ID","type":"uuid","required":true,"description":"入荷予定の一意識別子"},{"name":"部品ID","type":"uuid","required":true,"description":"部品テーブルへの外部キー"},{"name":"修理案件ID","type":"uuid","required":false,"description":"関連する修理案件への外部キー"},{"name":"予定入荷日","type":"timestamp","required":true,"description":"部品の予定入荷日時"},{"name":"入荷数量","type":"integer","required":true,"description":"入荷予定の部品数量"},{"name":"仕入先","type":"varchar(100)","required":true,"description":"部品の仕入先企業名"},{"name":"発注番号","type":"varchar(100)","required":false,"description":"仕入先での発注番号"},{"name":"ステータス","type":"varchar(100)","required":true,"description":"入荷予定のステータス（未発注、発注済、発送済、入荷完了等）"},{"name":"備考","type":"text","required":false,"description":"入荷予定に関する備考"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者","type":"varchar(100)","required":true,"description":"レコード作成者"}]},{"tableName":"顧客連絡履歴","purpose":"顧客との連絡内容、日時、方法、対応者を記録し、顧客対応の履歴管理と修理案件の進捗状況の把握に利用する","columns":[{"name":"連絡履歴ID","type":"uuid","required":true,"description":"連絡履歴の一意識別子"},{"name":"顧客ID","type":"uuid","required":true,"description":"連絡対象の顧客を特定するための外部キー"},{"name":"修理案件ID","type":"uuid","required":false,"description":"関連する修理案件がある場合の外部キー"},{"name":"連絡日時","type":"timestamp","required":true,"description":"顧客との連絡が発生した日時"},{"name":"連絡方法","type":"varchar(100)","required":true,"description":"連絡手段（電話、メール、SMS、来店等）"},{"name":"連絡内容","type":"text","required":true,"description":"顧客との連絡内容の詳細"},{"name":"対応者","type":"varchar(100)","required":true,"description":"連絡対応を行った従業員名またはID"},{"name":"次回連絡予定日","type":"timestamp","required":false,"description":"フォローアップが必要な場合の次回連絡予定日時"},{"name":"作成日時","type":"timestamp","required":true,"description":"連絡履歴レコードが作成された日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"連絡履歴レコードが最後に更新された日時"}]},{"tableName":"ログインユーザー","purpose":"修理業務管理システムのユーザー認証・認可を管理し、ログイン情報と権限情報を保持する","columns":[{"name":"ユーザーID","type":"uuid","required":true,"description":"ユーザーの一意識別子"},{"name":"ログインID","type":"varchar(100)","required":true,"description":"ログイン時に使用するユーザー名またはメールアドレス"},{"name":"パスワードハッシュ","type":"varchar(100)","required":true,"description":"ハッシュ化されたパスワード"},{"name":"ユーザー名","type":"varchar(100)","required":true,"description":"ユーザーの表示名"},{"name":"メールアドレス","type":"varchar(100)","required":true,"description":"ユーザーのメールアドレス"},{"name":"役割","type":"varchar(100)","required":true,"description":"ユーザーの役割（管理者、修理担当者、営業など）"},{"name":"有効フラグ","type":"boolean","required":true,"description":"ユーザーが有効かどうか"},{"name":"最終ログイン日時","type":"timestamp","required":false,"description":"最後にログインした日時"},{"name":"作成日時","type":"timestamp","required":true,"description":"ユーザーレコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"ユーザーレコード最終更新日時"},{"name":"作成者","type":"varchar(100)","required":true,"description":"ユーザーレコード作成者"}]},{"tableName":"ユーザー権限","purpose":"修理業務管理システムにおけるユーザーのロールベースアクセス制御を管理し、各ユーザーが実行可能な操作と閲覧可能なデータを制御する。","columns":[{"name":"ユーザー権限ID","type":"uuid","required":true,"description":"ユーザー権限レコードの一意識別子"},{"name":"ユーザーID","type":"uuid","required":true,"description":"ログインユーザーテーブルへの外部キー参照"},{"name":"権限コード","type":"varchar(100)","required":true,"description":"権限を識別するコード（例：ADMIN、TECHNICIAN、CUSTOMER_SERVICE、VIEWER）"},{"name":"権限名","type":"varchar(100)","required":true,"description":"権限の日本語表示名"},{"name":"説明","type":"text","required":false,"description":"権限の詳細説明"},{"name":"有効フラグ","type":"boolean","required":true,"description":"この権限が有効かどうかを示すフラグ"},{"name":"作成日時","type":"timestamp","required":true,"description":"ユーザー権限レコードの作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"ユーザー権限レコードの最終更新日時"},{"name":"作成者","type":"uuid","required":true,"description":"ユーザー権限を作成したユーザーID"},{"name":"更新者","type":"uuid","required":true,"description":"ユーザー権限を最後に更新したユーザーID"}]},{"tableName":"状態マスタ","purpose":"修理案件の状態を定義・管理するマスタテーブル。修理案件が遷移可能な状態を一元管理し、状態遷移履歴の参照先となる。","columns":[{"name":"状態ID","type":"uuid","required":true,"description":"状態マスタの一意識別子。主キー。"},{"name":"状態コード","type":"varchar(100)","required":true,"description":"状態を識別するコード。例：受付、診断中、見積待ち、修理中、完了、キャンセル等。ユニーク制約あり。"},{"name":"状態名","type":"varchar(100)","required":true,"description":"状態の日本語表示名。UI表示用。"},{"name":"説明","type":"text","required":false,"description":"状態の詳細説明。業務ルールや遷移条件の補足情報。"},{"name":"表示順序","type":"integer","required":true,"description":"UI表示時のソート順序。"},{"name":"有効フラグ","type":"boolean","required":true,"description":"状態が有効かどうか。無効な状態は新規案件に使用不可。"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時。"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時。"},{"name":"作成者","type":"uuid","required":true,"description":"レコード作成者のユーザーID。ログインユーザーテーブルへの外部キー。"},{"name":"更新者","type":"uuid","required":true,"description":"レコード最終更新者のユーザーID。ログインユーザーテーブルへの外部キー。"}]},{"tableName":"見積金額段階設定","purpose":"修理案件の見積金額を段階的に管理し、金額帯ごとの承認ルールや手数料設定を定義するマスタテーブル","columns":[{"name":"見積金額段階設定ID","type":"uuid","required":true,"description":"見積金額段階設定の一意識別子"},{"name":"段階名","type":"varchar(100)","required":true,"description":"金額段階の名称（例：小額修理、中額修理、高額修理）"},{"name":"最小金額","type":"integer","required":true,"description":"この段階の最小見積金額（円）"},{"name":"最大金額","type":"integer","required":true,"description":"この段階の最大見積金額（円）"},{"name":"承認者権限レベル","type":"varchar(100)","required":true,"description":"この金額段階の見積を承認できるユーザー権限レベル"},{"name":"手数料率","type":"integer","required":false,"description":"この段階に適用される手数料率（パーセンテージ）"},{"name":"備考","type":"text","required":false,"description":"この金額段階に関する補足情報"},{"name":"有効フラグ","type":"boolean","required":true,"description":"この段階設定が有効かどうか"},{"name":"作成日時","type":"timestamp","required":true,"description":"レコード作成日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"レコード最終更新日時"},{"name":"作成者","type":"uuid","required":true,"description":"レコード作成者のユーザーID"},{"name":"更新者","type":"uuid","required":true,"description":"レコード最終更新者のユーザーID"}]},{"tableName":"自動催促設定","purpose":"修理案件の進捗状況に基づいて自動的に顧客への催促を実行するための設定を管理するテーブル","columns":[{"name":"自動催促設定ID","type":"uuid","required":true,"description":"自動催促設定の一意識別子"},{"name":"設定名","type":"varchar(100)","required":true,"description":"催促設定の名称"},{"name":"対象状態ID","type":"uuid","required":true,"description":"催促対象となる修理案件状態を示す状態マスタへの外部キー"},{"name":"催促トリガー日数","type":"integer","required":true,"description":"対象状態に遷移してから催促を実行するまでの日数"},{"name":"催促方法","type":"varchar(100)","required":true,"description":"催促の方法（メール、電話、SMS等）"},{"name":"催促メッセージテンプレート","type":"text","required":false,"description":"催促時に使用するメッセージテンプレート"},{"name":"最大催促回数","type":"integer","required":true,"description":"同一案件に対する最大催促回数"},{"name":"催促間隔日数","type":"integer","required":true,"description":"複数回催促する場合の催促間隔（日数）"},{"name":"有効フラグ","type":"boolean","required":true,"description":"この設定が有効かどうかを示すフラグ"},{"name":"作成日時","type":"timestamp","required":true,"description":"設定が作成された日時"},{"name":"更新日時","type":"timestamp","required":true,"description":"設定が最後に更新された日時"},{"name":"作成者","type":"uuid","required":true,"description":"設定を作成したログインユーザーへの外部キー"},{"name":"更新者","type":"uuid","required":true,"description":"設定を最後に更新したログインユーザーへの外部キー"}]}];
+window.AIVIC_PRESET_SEED = {"修理案件":[{"案件ID":"rec-001","案件番号":"REP-2025-00847","顧客ID":"rec-cust-0234","顧客名":"佐藤美咲","連絡先電話番号":"090-1234-5678","連絡先メールアドレス":"misaki.sato@example.com","修理対象品目":"冷蔵庫（パナソニック NR-F603XPV）","修理内容":"冷凍室が冷えなくなり、食材が溶けかけている状態。圧縮機音がしない可能性あり。","受付日時":"2025-01-15 09:30:00","希望完了日":"2025-01-15 18:00:00","ステータス":"修理中","優先度":"高","担当者ID":"rec-emp-0156","見積金額":28000,"実績金額":null,"完了日時":null,"備考":"顧客が本日中の修理完了を強く希望。冷凍食品が大量に保管されているため優先対応。","作成日時":"2025-01-15 09:32:00","作成者ID":"rec-user-0089","更新日時":"2025-01-15 11:45:00","更新者ID":"rec-emp-0156"},{"案件ID":"rec-001","案件番号":"MR20250156","顧客ID":"rec-cust-0847","顧客名":"鈴木美咲","連絡先電話番号":"090-1234-5678","連絡先メールアドレス":"suzuki.misaki@example.com","修理対象品目":"洗濯機（ドラム式、パナソニック製）","修理内容":"運転中に異音が発生し、脱水時に振動が大きくなる。電源投入後、エラーコード表示なし。","受付日時":"2025-01-15 10:30:00","希望完了日":"2025-01-22 18:00:00","ステータス":"診断中","優先度":"中","担当者ID":"rec-emp-0312","見積金額":18000,"実績金額":null,"完了日時":null,"備考":"ドラムベアリングの劣化が疑われる。分解調査予定。部品取り寄せ中。","作成日時":"2025-01-15 10:32:00","作成者ID":"rec-user-0156","更新日時":"2025-01-17 14:15:00","更新者ID":"rec-emp-0312"},{"案件ID":"rec-001","案件番号":"MR-2024-0847","顧客ID":"rec-cust-0342","顧客名":"山田花子","連絡先電話番号":"090-1234-5678","連絡先メールアドレス":"yamada.hanako@example.com","修理対象品目":"業務用複合機 Ricoh MP C3004","修理内容":"給紙ローラー不具合により用紙が詰まる。定期メンテナンス後から発生。","受付日時":"2024-12-15 10:30:00","希望完了日":"2024-12-25 17:00:00","ステータス":"見積承認待ち","優先度":"高","担当者ID":"rec-emp-0156","見積金額":185000,"実績金額":null,"完了日時":null,"備考":"高額修理のため顧客承認待機中。部品交換と調整が必要。","作成日時":"2024-12-15 10:35:00","作成者ID":"rec-user-0089","更新日時":"2024-12-15 14:20:00","更新者ID":"rec-emp-0156"},{"案件ID":"rec-001","案件番号":"MR20250156","顧客ID":"rec-c-0042","顧客名":"佐藤美咲","連絡先電話番号":"090-1234-5678","連絡先メールアドレス":"sato.misaki@example.com","修理対象品目":"洗濯機（パナソニック NA-FA80H7）","修理内容":"脱水時に異音がする。ドラム内部の軸受け摩耗と判定。軸受け交換実施。","受付日時":"2025-01-10 09:30:00","希望完了日":"2025-01-17 17:00:00","ステータス":"完了","優先度":"中","担当者ID":"rec-emp-0015","見積金額":18000,"実績金額":18000,"完了日時":"2025-01-15 14:45:00","備考":"軸受け交換により正常動作を確認。顧客満足度良好。","作成日時":"2025-01-10 09:35:00","作成者ID":"rec-user-0008","更新日時":"2025-01-15 15:20:00","更新者ID":"rec-emp-0015"},{"案件ID":"rec-001","案件番号":"RP20250156","顧客ID":"rec-c-0847","顧客名":"鈴木美咲","連絡先電話番号":"090-2847-5693","連絡先メールアドレス":"suzuki.misaki@example.com","修理対象品目":"洗濯機","修理内容":"洗濯時に異音がし、脱水が機能しない状態。モーター周辺の故障と推定。","受付日時":"2025-01-10 14:30:00","希望完了日":"2025-01-20 17:00:00","ステータス":"キャンセル","優先度":"中","担当者ID":"rec-e-0312","見積金額":28000,"実績金額":null,"完了日時":null,"備考":"顧客より1月15日に新しい洗濯機を購入することになったため、修理をキャンセルしたいとの連絡あり。","作成日時":"2025-01-10 14:32:00","作成者ID":"rec-u-0156","更新日時":"2025-01-15 10:45:00","更新者ID":"rec-u-0156"},{"案件ID":"rec-001","案件番号":"2024-保証-00847","顧客ID":"rec-cust-0234","顧客名":"鈴木美咲","連絡先電話番号":"090-1234-5678","連絡先メールアドレス":"suzuki.misaki@example.com","修理対象品目":"ノートパソコン型番PC-X580","修理内容":"購入から8ヶ月。バッテリーが充電されない状態。保証期間内での無償対応依頼。","受付日時":"2024-11-15 10:30:00","希望完了日":"2024-11-22 17:00:00","ステータス":"修理中","優先度":"中","担当者ID":"rec-emp-0156","見積金額":0,"実績金額":0,"完了日時":null,"備考":"保証期間内（購入日2024-03-10）。バッテリーユニット交換で対応。無償修理。","作成日時":"2024-11-15 10:35:00","作成者ID":"rec-user-0089","更新日時":"2024-11-18 14:20:00","更新者ID":"rec-emp-0156"},{"案件ID":"rec-001","案件番号":"MR-2024-0847","顧客ID":"rec-102","顧客名":"山田花子","連絡先電話番号":"090-1234-5678","連絡先メールアドレス":"yamada.hanako@example.com","修理対象品目":"ドラム式洗濯機","修理内容":"脱水時に異音が発生し、衣類が濡れたまま停止する。モーター周辺の不具合と推定。","受付日時":"2024-11-15 10:30:00","希望完了日":"2024-11-25 17:00:00","ステータス":"部品待ち","優先度":"中","担当者ID":"rec-203","見積金額":28000,"実績金額":null,"完了日時":null,"備考":"ドラムモーター部品の入荷予定は11月22日。納期確認済み。","作成日時":"2024-11-15 10:35:00","作成者ID":"rec-301","更新日時":"2024-11-18 14:20:00","更新者ID":"rec-203"},{"案件ID":"rec-001","案件番号":"MR-2025-00847","顧客ID":"rec-c-0234","顧客名":"山田花子","連絡先電話番号":"090-1234-5678","連絡先メールアドレス":"yamada.hanako@example.com","修理対象品目":"洗濯機","修理内容":"洗濯槽の軽微な異音。運転時に周期的なきしみ音が発生。部品の劣化と推定。","受付日時":"2025-01-15 10:30:00","希望完了日":"2025-02-28 17:00:00","ステータス":"受付","優先度":"低","担当者ID":"rec-emp-0156","見積金額":8500,"実績金額":null,"完了日時":null,"備考":"顧客都合で2月中旬以降の対応で問題なし。在庫部品で対応予定。","作成日時":"2025-01-15 10:35:00","作成者ID":"rec-user-0089","更新日時":"2025-01-15 10:35:00","更新者ID":"rec-user-0089"},{"案件ID":"rec-001","案件番号":"MR2024-0847","顧客ID":"rec-c-0342","顧客名":"佐藤美咲","連絡先電話番号":"090-1234-5678","連絡先メールアドレス":"sato.misaki@example.com","修理対象品目":"洗濯機（ドラム式）","修理内容":"脱水時に異音が発生し、衣類が濡れたまま排出される状態。ベルト交換が必要と判断。","受付日時":"2024-11-15 10:30:00","希望完了日":"2024-11-28 17:00:00","ステータス":"完了","優先度":"中","担当者ID":"rec-e-0156","見積金額":18500,"実績金額":19800,"完了日時":"2024-12-09 14:20:00","備考":"部品納期遅延により希望日を11日超過。顧客へは12月3日に進捗報告済み。","作成日時":"2024-11-15 10:35:00","作成者ID":"rec-u-0089","更新日時":"2024-12-09 14:25:00","更新者ID":"rec-u-0156"},{"案件ID":"rec-001","案件番号":"MR-2024-0847","顧客ID":"rec-cust-0342","顧客名":"佐藤美咲","連絡先電話番号":"090-1234-5678","連絡先メールアドレス":"sato.misaki@email.com","修理対象品目":"エアコン室内機","修理内容":"冷房運転時に異音が発生し冷却効率が低下。内部洗浄と部品交換が必要と判明。","受付日時":"2024-11-15 10:30:00","希望完了日":"2024-11-22 17:00:00","ステータス":"完了","優先度":"中","担当者ID":"rec-emp-0156","見積金額":28000,"実績金額":35800,"完了日時":"2024-11-20 16:45:00","備考":"洗浄後にファンモーター不良が判明し交換対応。部品代追加で実績超過。","作成日時":"2024-11-15 10:35:00","作成者ID":"rec-user-0089","更新日時":"2024-11-20 17:00:00","更新者ID":"rec-user-0089"}],"顧客":[{"顧客ID":"rec-001","顧客名":"佐藤花子","顧客名カナ":"サトウハナコ","電話番号":"090-1234-5678","メールアドレス":"satoh.hanako@example.com","住所":"東京都渋谷区道玄坂1-2-3 マンション渋谷101号室","請求先住所":"","顧客区分":"個人","備考":"冷蔵庫の製氷機が動作しない。過去に洗濯機の修理で利用。","作成日時":"2024-11-15 10:30:00","更新日時":"2024-11-15 10:30:00","作成者":"user-0042","更新者":"user-0042"},{"顧客ID":"rec-001","顧客名":"株式会社ハマダ精密工業","顧客名カナ":"ハマダセイミツコウギョウ","電話番号":"045-XXX-XXXX","メールアドレス":"maintenance@hamada-seimitsu.co.jp","住所":"神奈川県横浜市港北区新横浜3-18-1 ハマダビル5階","請求先住所":"神奈川県横浜市中区本町6-50-10 経理部宛","顧客区分":"法人","備考":"月次定期メンテナンス契約。旋盤・フライス盤5台対象。担当営業：佐藤健一","作成日時":"2024-04-15 09:30:00","更新日時":"2025-01-20 14:45:00","作成者":"user-0342","更新者":"user-0342"},{"顧客ID":"rec-001","顧客名":"株式会社テクノロジーソリューションズ","顧客名カナ":"テクノロジーソリューションズ","電話番号":"03-5678-9012","メールアドレス":"contact@techsol.co.jp","住所":"東京都渋谷区道玄坂2-10-7 新大宮ビル5階","請求先住所":"東京都千代田区丸の内1-6-2 丸の内ビルディング10階","顧客区分":"法人","備考":"本社は千代田区、修理対応は渋谷支社で対応。緊急時は支社に直接連絡。","作成日時":"2024-04-15 09:30:00","更新日時":"2025-01-22 14:45:00","作成者":"yamada-taro","更新者":"suzuki-hanako"},{"顧客ID":"rec-001","顧客名":"田中電気工事","顧客名カナ":"タナカデンキコウジ","電話番号":"090-1234-5678","メールアドレス":"tanaka.denki@example.com","住所":"東京都渋谷区道玄坂2-1-1","請求先住所":"東京都渋谷区道玄坂2-1-1","顧客区分":"個人事業主","備考":"毎月第1金曜日に定期修理サービス利用。請求書は月末締め翌月10日払い。","作成日時":"2024-03-15 09:30:00","更新日時":"2025-01-20 14:45:00","作成者":"usr-0001","更新者":"usr-0002"},{"顧客ID":"rec-001","顧客名":"株式会社テクノロジーソリューション","顧客名カナ":"カブシキガイシャテクノロジーソリューション","電話番号":"03-5678-9012","メールアドレス":"contact@techsol.co.jp","住所":"東京都渋谷区道玄坂1-2-3 テックビル5階","請求先住所":"東京都渋谷区道玄坂1-2-3 テックビル5階","顧客区分":"法人","備考":"初回修理依頼、信用調査中。業界：IT関連、従業員数約50名","作成日時":"2025-01-15T09:30:00","更新日時":"2025-01-15T09:30:00","作成者":"user-0042","更新者":"user-0042"},{"顧客ID":"rec-001","顧客名":"株式会社グローバルテック","顧客名カナ":"カブシキガイシャグローバルテック","電話番号":"03-XXXX-5678","メールアドレス":"accounting@globaltech.co.jp","住所":"東京都渋谷区道玄坂1-2-3 グローバルビル5階","請求先住所":"東京都千代田区丸の内1-1-1 本社ビル10階 経理部","顧客区分":"法人","備考":"グループ企業向け大口顧客、月額契約、請求先は親会社本社へ","作成日時":"2024-01-15T09:30:00","更新日時":"2025-01-20T14:45:00","作成者":"user-0001","更新者":"user-0002"},{"顧客ID":"rec-001","顧客名":"佐藤花子","顧客名カナ":"サトウハナコ","電話番号":"09012345678","メールアドレス":"satou.hanako@example.com","住所":"東京都渋谷区道玄坂1-2-3 マンション101号室","請求先住所":"","顧客区分":"個人","備考":"修理完了後の連絡に応答なし。電話転送設定の可能性あり","作成日時":"2024-11-15 10:30:00","更新日時":"2025-01-22 14:15:00","作成者":"user-0045","更新者":"user-0078"},{"顧客ID":"rec-001","顧客名":"株式会社サンライズ商事","顧客名カナ":"カブシキガイシャサンライズショウジ","電話番号":"03-5678-1234","メールアドレス":"info@sunrise-shoji.co.jp","住所":"東京都渋谷区道玄坂1-2-3 ビジネスビル5階","請求先住所":"東京都渋谷区道玄坂1-2-3 ビジネスビル5階","顧客区分":"法人","備考":"2025年3月31日付で契約終了。再契約予定なし。","作成日時":"2023-06-15T09:30:00","更新日時":"2025-03-31T17:45:00","作成者":"user-0042","更新者":"user-0015"},{"顧客ID":"rec-001","顧客名":"株式会社グローバルテック日本支社","顧客名カナ":"グローバルテックニホンシシャ","電話番号":"03-1234-5678","メールアドレス":"maintenance@globaltech-jp.co.jp","住所":"東京都千代田区丸の内1-2-3 グローバルビル5階","請求先住所":"東京都千代田区丸の内1-2-3 グローバルビル経理部","顧客区分":"法人","備考":"海外親会社からの指示で日本国内の精密機器修理対応。契約ID:GT-JP-2024-001。担当:営業部長・田中太郎。","作成日時":"2024-11-15T09:30:00+09:00","更新日時":"2024-12-20T14:15:00+09:00","作成者":"user-0042","更新者":"user-0042"}],"修理案件状態遷移履歴":[{"状態遷移履歴ID":"rec-001","修理案件ID":"rec-0847","変更前状態":"未作成","変更後状態":"受付済み","変更理由":"顧客からの修理依頼受付により新規案件を作成","作成日時":"2024-11-15 09:30:45","作成者":"佐藤花子"},{"状態遷移履歴ID":"rec-001","修理案件ID":"rec-2024-0847","変更前状態":"診断中","変更後状態":"見積もり作成待ち","変更理由":"診断完了。部品交換が必要と判定","作成日時":"2024-12-15 14:32:00","作成者":"山田太郎"},{"状態遷移履歴ID":"rec-001","修理案件ID":"rec-0847","変更前状態":"見積もり待ち","変更後状態":"修理作業中","変更理由":"顧客が見積もり金額¥28,500を承認し、修理作業を開始","作成日時":"2024-11-15 09:30:00","作成者":"鈴木花子"},{"状態遷移履歴ID":"rec-001","修理案件ID":"rec-repair-2024-0847","変更前状態":"修理中","変更後状態":"修理中（作業内容変更）","変更理由":"HDD交換作業中にマザーボードの焦げ跡を発見、基板修復が必要に判明したため作業内容を拡大","作成日時":"2024-11-15 14:32:00","作成者":"鈴木健一"},{"状態遷移履歴ID":"rec-001","修理案件ID":"rec-2024-0847","変更前状態":"修理中","変更後状態":"一時中断","変更理由":"エアコン室外機の冷媒配管用銅管在庫不足により作業を一時中断。入荷予定は2025年1月15日。","作成日時":"2024-12-28 14:32:00","作成者":"山田花子"},{"状態遷移履歴ID":"rec-001","修理案件ID":"rec-047","変更前状態":"部品待ち","変更後状態":"修理作業中","変更理由":"エアコン室外機用コンプレッサー到着のため作業再開","作成日時":"2025-01-15 09:30:00","作成者":"山田太郎"},{"状態遷移履歴ID":"rec-001","修理案件ID":"rec-0847","変更前状態":"修理中","変更後状態":"品質検査待ち","変更理由":"エアコン室内機の分解清掃および冷媒充填が完了したため","作成日時":"2024-11-15 14:32:00","作成者":"山田太郎"},{"状態遷移履歴ID":"rec-001","修理案件ID":"rec-2024-0847","変更前状態":"品質検査中","変更後状態":"納品準備完了","変更理由":"品質検査に合格。顧客への納品手配を開始","作成日時":"2024-11-28 14:32:15","作成者":"鈴木花子"},{"状態遷移履歴ID":"rec-001","修理案件ID":"rec-0847","変更前状態":"修理完了待ち","変更後状態":"完了","変更理由":"顧客が修理品を受け取り、案件完了","作成日時":"2024-12-15 14:30:00","作成者":"田中太郎"},{"状態遷移履歴ID":"rec-001","修理案件ID":"rec-0847","変更前状態":"修理中","変更後状態":"修理不可","変更理由":"基板の故障を確認。部品調達不可のため修理対応不可と判定","作成日時":"2024-11-15 14:32:00","作成者":"山田太郎"}],"見積情報":[{"見積ID":"rec-001","修理案件ID":"rec-case-0847","見積番号":"EST-2024-1247","見積日":"2024-11-15T09:30:00","有効期限":"2024-12-15T23:59:59","見積内容":"エアコン室外機の冷媒漏れ箇所の特定と修理、冷媒R410A充填","材料費":18000,"作業費":22000,"合計金額":40000,"消費税":4000,"税込合計":44000,"備考":"漏れ箇所は配管接続部と判断。修理後は冷媒充填量を確認予定。","作成日時":"2024-11-15T09:35:22","更新日時":"2024-11-15T09:35:22","作成者":"山田太郎"},{"見積ID":"rec-001","修理案件ID":"rec-0847","見積番号":"EST-2024-0521","見積日":"2024-11-15T10:30:00Z","有効期限":"2024-12-15T23:59:59Z","見積内容":"業務用複合機のメインボード及びトナーユニット交換、部品代及び技術料金を含む","材料費":185000,"作業費":45000,"合計金額":230000,"消費税":23000,"税込合計":253000,"備考":"部品取り寄せに5営業日要します。交換作業は出張対応となります。","作成日時":"2024-11-15T10:35:22Z","更新日時":"2024-11-15T10:35:22Z","作成者":"山田花子"},{"見積ID":"rec-001","修理案件ID":"rec-002","見積番号":"QT-2024-12-0847","見積日":"2024-12-15T09:30:00+09:00","有効期限":"2024-12-22T23:59:59+09:00","見積内容":"エアコン室外機の冷媒漏洩修理。緊急対応のため割増料金20%を適用。","材料費":18000,"作業費":32000,"合計金額":50000,"消費税":5000,"税込合計":55000,"備考":"深夜緊急対応（22時以降）のため割増料金を適用いたしました。年末対応のため納期は1営業日となります。","作成日時":"2024-12-15T09:35:22+09:00","更新日時":"2024-12-15T09:35:22+09:00","作成者":"佐藤花子"},{"見積ID":"rec-001","修理案件ID":"rec-case-0847","見積番号":"EST-2025-00156","見積日":"2025-01-15T09:30:00+09:00","有効期限":"2025-02-15T23:59:59+09:00","見積内容":"定期メンテナンス契約に基づく1月度点検・清掃・部品交換","材料費":18000,"作業費":32000,"合計金額":50000,"消費税":5000,"税込合計":55000,"備考":"定期メンテナンス契約割引10%適用済み。次回メンテナンス予定日は2月15日。","作成日時":"2025-01-15T09:30:00+09:00","更新日時":"2025-01-15T09:30:00+09:00","作成者":"佐藤花子"},{"見積ID":"rec-001","修理案件ID":"rec-0847","見積番号":"MIE-2025-00156","見積日":"2025-01-15T10:30:00+09:00","有効期限":"2025-04-15T23:59:59+09:00","見積内容":"エアコン室外機の冷媒ガス漏れ修理、配管交換、真空引き施工","材料費":28000,"作業費":15000,"合計金額":43000,"消費税":4300,"税込合計":47300,"備考":"前回見積（MIE-2024-00089）有効期限切れのため再作成。部品価格改定により材料費増加。","作成日時":"2025-01-15T10:30:00+09:00","更新日時":"2025-01-15T10:30:00+09:00","作成者":"佐藤花子"},{"見積ID":"rec-001","修理案件ID":"rec-0042","見積番号":"EST-2025-00847","見積日":"2025-01-15T10:30:00","有効期限":"2025-02-15T23:59:59","見積内容":"エアコン室内機の基板交換及び冷媒充填作業","材料費":28000,"作業費":18000,"合計金額":46000,"消費税":4600,"税込合計":50600,"備考":"顧客値引き交渉対応により材料費から3,000円割引済み。初回見積から修正。","作成日時":"2025-01-15T10:30:00","更新日時":"2025-01-17T14:45:00","作成者":"山田花子"},{"見積ID":"rec-001","修理案件ID":"rec-101","見積番号":"EST-2024-0847","見積日":"2024-11-15T10:30:00","有効期限":"2024-12-15T23:59:59","見積内容":"エアコン室内機クリーニング、洗濯機分解洗浄、給湯器点検・部品交換を含む3点セット修理","材料費":18500,"作業費":32000,"合計金額":50500,"消費税":5050,"税込合計":55550,"備考":"複数箇所同時修理のため作業費15%割引適用済み。12月中の施工予定。","作成日時":"2024-11-15T10:30:00","更新日時":"2024-11-15T10:30:00","作成者":"佐藤花子"},{"見積ID":"rec-001","修理案件ID":"rec-case-0247","見積番号":"QT-2024-1847","見積日":"2024-11-15T10:30:00+09:00","有効期限":"2024-12-15T23:59:59+09:00","見積内容":"エアコン室外機コンプレッサー交換。部品在庫不足により納期が通常より2週間延長予定。","材料費":85000,"作業費":35000,"合計金額":120000,"消費税":12000,"税込合計":132000,"備考":"コンプレッサー部品の入荷待ち。最短納期は12月上旬予定。顧客への事前説明済み。","作成日時":"2024-11-15T10:30:00+09:00","更新日時":"2024-11-15T10:30:00+09:00","作成者":"山田花子"},{"見積ID":"rec-001","修理案件ID":"rec-102","見積番号":"QT-2024-08-0847","見積日":"2024-08-15T10:30:00+09:00","有効期限":"2024-09-14T23:59:59+09:00","見積内容":"エアコン室内機の基板交換。保証期間内だが液体浸入による損傷のため有償対応。","材料費":28000,"作業費":12000,"合計金額":40000,"消費税":4000,"税込合計":44000,"備考":"保証対象外理由：液体浸入による故障。お客様確認後の着手予定。","作成日時":"2024-08-15T10:32:15+09:00","更新日時":"2024-08-15T10:32:15+09:00","作成者":"佐藤花子"},{"見積ID":"rec-001","修理案件ID":"rec-002","見積番号":"QT-2024-1847","見積日":"2024-11-15T10:30:00","有効期限":"2024-12-15T23:59:59","見積内容":"エアコン室外機の冷媒漏れ修理、配管交換、ガス充填作業","材料費":28000,"作業費":15000,"合計金額":43000,"消費税":4300,"税込合計":47300,"備考":"有効期限内に承認なく失効。顧客より他社での修理実施の連絡あり。","作成日時":"2024-11-15T10:35:22","更新日時":"2024-12-16T09:00:00","作成者":"山田花子"}],"部品":[{"部品ID":"rec-001","部品コード":"COP-PIPE-16A","部品名":"エアコン冷媒配管用銅管パイプ16mm","部品説明":"エアコン室内機と室外機を接続する冷媒配管用の銅管。16mm径、脱酸銅製。修理・交換時の消耗品。","単価":2800,"在庫数":47,"最小在庫数":20,"仕入先":"日本銅管工業株式会社","カテゴリ":"冷媒配管部品","有効フラグ":true,"作成日時":"2024-04-15T09:30:00+09:00","更新日時":"2025-01-22T14:15:00+09:00","作成者":"田中太郎","更新者":"佐藤花子"},{"部品ID":"rec-001","部品コード":"WM-DRUM-BEARING-2024","部品名":"洗濯機ドラム軸受けユニット","部品説明":"洗濯機ドラムの回転を支持する高精度軸受けユニット。耐久性に優れ、長期使用可能。","単価":28500,"在庫数":4,"最小在庫数":3,"仕入先":"日本精工株式会社","カテゴリ":"洗濯機部品","有効フラグ":true,"作成日時":"2024-03-15T09:30:00","更新日時":"2025-01-20T14:15:00","作成者":"田中太郎","更新者":"鈴木花子"},{"部品ID":"rec-001","部品コード":"IGN-PG-001","部品名":"給湯器点火プラグ 標準型","部品説明":"給湯器の燃焼室内で着火を行う消耗品。高温環境での耐久性と迅速な点火性能を備えた標準仕様モデル。","単価":2800,"在庫数":450,"最小在庫数":200,"仕入先":"日本電熱工業株式会社","カテゴリ":"給湯器部品","有効フラグ":true,"作成日時":"2024-04-15T09:30:00","更新日時":"2025-01-22T14:15:00","作成者":"山田花子","更新者":"鈴木健太"},{"部品ID":"rec-001","部品コード":"COMP-CR-2024-001","部品名":"冷蔵庫用コンプレッサーユニット","部品説明":"R600a冷媒対応、定格出力750W、防振マウント付き、国内主要冷蔵庫メーカー対応","単価":28500,"在庫数":12,"最小在庫数":5,"仕入先":"東芝コンプレッサー工業株式会社","カテゴリ":"冷却システム","有効フラグ":true,"作成日時":"2024-06-15 09:30:00","更新日時":"2025-01-10 14:22:00","作成者":"山田太郎","更新者":"佐藤花子"},{"部品ID":"rec-001","部品コード":"FM-AC-2400","部品名":"エアコン室外機用ファンモーター 24W","部品説明":"室外機の室外熱交換器冷却用ファンモーター。定格24W、回転数1200rpm、耐久性と静音性を両立した標準仕様品。","単価":8500,"在庫数":47,"最小在庫数":30,"仕入先":"日本電機工業株式会社","カテゴリ":"空調部品","有効フラグ":true,"作成日時":"2024-04-15T09:30:00+09:00","更新日時":"2025-01-20T14:15:00+09:00","作成者":"山田太郎","更新者":"鈴木花子"},{"部品ID":"rec-001","部品コード":"LED-BL-55-001","部品名":"55型液晶テレビ用バックライトLEDユニット","部品説明":"55インチ液晶テレビ用のバックライトLEDユニット。直下型フルアレイ方式、消費電力45W、色温度6500K。修理・交換用の純正部品。","単価":8500,"在庫数":12,"最小在庫数":5,"仕入先":"株式会社ディスプレイ部品工業","カテゴリ":"液晶テレビ部品","有効フラグ":true,"作成日時":"2024-04-15T09:30:00","更新日時":"2025-01-22T14:15:00","作成者":"山田花子","更新者":"鈴木次郎"},{"部品ID":"rec-001","部品コード":"MK-2024-001","部品名":"電子レンジ用マイカ板","部品説明":"マグネトロン保護用耐熱マイカ板、2000W対応、廃止予定品","単価":1250,"在庫数":45,"最小在庫数":20,"仕入先":"日本マイカ工業株式会社","カテゴリ":"電子レンジ部品","有効フラグ":false,"作成日時":"2024-03-15T09:30:00","更新日時":"2025-01-20T14:45:00","作成者":"田中太郎","更新者":"鈴木花子"},{"部品ID":"rec-001","部品コード":"DW-ARM-001","部品名":"食洗機スプレーアーム（プラスチック製）","部品説明":"食洗機の回転スプレーアーム、耐熱性プラスチック製、直径120mm、標準型食洗機対応","単価":1850,"在庫数":245,"最小在庫数":50,"仕入先":"日本プラスチック工業株式会社","カテゴリ":"給水・噴射部品","有効フラグ":true,"作成日時":"2024-03-15T09:30:00","更新日時":"2025-01-22T14:15:00","作成者":"佐藤花子","更新者":"鈴木健太"},{"部品ID":"rec-001","部品コード":"AC-RCB-2024-001","部品名":"エアコンリモコン基板アセンブリ","部品説明":"窓用・壁掛け型エアコン対応のリモコン受信基板。赤外線受信素子、マイコン、電源回路を搭載。動作温度範囲-10℃～60℃。","単価":2800,"在庫数":145,"最小在庫数":50,"仕入先":"株式会社エレクトロニクス東京","カテゴリ":"電子部品","有効フラグ":true,"作成日時":"2024-04-15T09:30:00","更新日時":"2025-01-20T14:22:00","作成者":"鈴木花子","更新者":"山田次郎"},{"部品ID":"rec-001","部品コード":"HEPA-F001","部品名":"空気清浄機用HEPAフィルター","部品説明":"PM2.5対応の高性能HEPAフィルター。交換目安は6ヶ月ごと。対応機種：AC-2500型","単価":3800,"在庫数":45,"最小在庫数":20,"仕入先":"株式会社エアテック","カテゴリ":"消耗品","有効フラグ":true,"作成日時":"2024-04-15 09:30:00","更新日時":"2025-01-22 14:15:00","作成者":"田中太郎","更新者":"鈴木花子"}],"部品入荷予定":[{"入荷予定ID":"rec-001","部品ID":"rec-002","修理案件ID":"rec-003","予定入荷日":"2025-01-15 14:30:00","入荷数量":3,"仕入先":"株式会社テクノパーツ","発注番号":"PO-2025-001847","ステータス":"発送済","備考":"緊急案件のため特急配送手配済み。配送予定は1月15日午後。","作成日時":"2025-01-13 09:15:00","更新日時":"2025-01-14 16:45:00","作成者":"山田花子"},{"入荷予定ID":"rec-001","部品ID":"rec-042","修理案件ID":"rec-156","予定入荷日":"2025-02-15T10:00:00","入荷数量":50,"仕入先":"株式会社テクノパーツ","発注番号":"PO-2025-0847","ステータス":"発注済","備考":"定期メンテナンス用フィルターセット、通常納期内での対応予定","作成日時":"2025-01-20T09:30:00","更新日時":"2025-01-20T09:30:00","作成者":"山田花子"},{"入荷予定ID":"rec-001","部品ID":"rec-042","修理案件ID":"rec-156","予定入荷日":"2024-12-15T10:00:00","入荷数量":24,"仕入先":"株式会社テクノパーツ","発注番号":"PO-2024-087654","ステータス":"発送済","備考":"複数台の同一機種修理用の一括発注。納期厳守要望あり。","作成日時":"2024-11-28T14:30:00","更新日時":"2024-12-10T09:15:00","作成者":"山田花子"},{"入荷予定ID":"rec-001","部品ID":"rec-002","修理案件ID":"rec-003","予定入荷日":"2025-02-15 14:30:00","入荷数量":8,"仕入先":"テックサプライ東京","発注番号":"TS-2025-0847","ステータス":"発送済","備考":"初期仕入先の納期遅延により代替仕入先へ再発注。クール便対応。","作成日時":"2025-01-28 09:15:00","更新日時":"2025-02-10 16:45:00","作成者":"山田花子"},{"入荷予定ID":"rec-001","部品ID":"rec-002","修理案件ID":"rec-003","予定入荷日":"2025-02-15T10:00:00","入荷数量":2,"仕入先":"精密機械部品工業株式会社","発注番号":"PO-2024-087654","ステータス":"発送済","備考":"顧客指定の特別仕様品。納期延長により現在配送中。到着予定は2月15日。","作成日時":"2024-12-10T09:30:00","更新日時":"2025-01-28T14:15:00","作成者":"山田花子"},{"入荷予定ID":"rec-001","部品ID":"rec-102","修理案件ID":"rec-503","予定入荷日":"2025-01-15T10:00:00Z","入荷数量":50,"仕入先":"株式会社テクノパーツ","発注番号":"PO-2024-08847","ステータス":"発注済","備考":"冬季需要増に対応した定期補充。納期確認済み。","作成日時":"2024-12-20T14:30:00Z","更新日時":"2025-01-08T09:15:00Z","作成者":"鈴木美咲"},{"入荷予定ID":"rec-001","部品ID":"rec-002","修理案件ID":"rec-003","予定入荷日":"2025-02-15T10:00:00","入荷数量":3,"仕入先":"株式会社テクノパーツ","発注番号":"PO-2024-087654","ステータス":"返品手配中","備考":"案件キャンセルに伴い返品対応予定。仕入先との調整完了待ち","作成日時":"2024-12-10T14:30:00","更新日時":"2025-01-08T09:15:00","作成者":"佐藤花子"},{"入荷予定ID":"rec-001","部品ID":"rec-042","修理案件ID":"rec-789","予定入荷日":"2025-02-15T10:00:00Z","入荷数量":24,"仕入先":"シンガポール精密工業有限公司","発注番号":"SG-2024-1847-A","ステータス":"発送済","備考":"通関手続き中。税関検査予定は2月12日。","作成日時":"2024-12-20T14:30:00Z","更新日時":"2025-02-05T09:15:00Z","作成者":"山田花子"},{"入荷予定ID":"rec-001","部品ID":"rec-002","修理案件ID":"rec-003","予定入荷日":"2025-01-15T14:00:00Z","入荷数量":3,"仕入先":"株式会社エレクトロパーツ","発注番号":"EP-2025-00847","ステータス":"発送済","備考":"不具合報告による追加交換対応。急速手配で対応。","作成日時":"2025-01-10T09:30:00Z","更新日時":"2025-01-13T16:45:00Z","作成者":"山田花子"},{"入荷予定ID":"rec-001","部品ID":"rec-002","修理案件ID":"rec-003","予定入荷日":"2024-11-15T09:00:00","入荷数量":150,"仕入先":"株式会社テクノパーツ","発注番号":"PO-2024-08-7543","ステータス":"発注済","備考":"冬季需要対応。エアコン室内機用フィルター。納期確認済み。","作成日時":"2024-08-20T14:30:00","更新日時":"2024-09-05T10:15:00","作成者":"佐藤花子"}],"顧客連絡履歴":[{"連絡履歴ID":"rec-001","顧客ID":"cust-2847","修理案件ID":"repair-5923","連絡日時":"2024-11-15T14:30:00+09:00","連絡方法":"電話","連絡内容":"冷蔵庫が冷えなくなったとのことで修理依頼を受付。型番はSR-S5700、購入から3年。初期診断として冷媒漏れの可能性を説明し、出張修理の日程調整を行った。","対応者":"鈴木花子","次回連絡予定日":"2024-11-18T10:00:00+09:00","作成日時":"2024-11-15T14:35:00+09:00","更新日時":"2024-11-15T14:35:00+09:00"},{"連絡履歴ID":"rec-001","顧客ID":"cust-0847","修理案件ID":"repair-2512","連絡日時":"2024-12-18T14:30:00+09:00","連絡方法":"電話","連絡内容":"ノートパソコンの修理が完了したため完了通知。引き取り日程を12月20日または21日で調整し、顧客は21日午後を希望。","対応者":"鈴木美咲","次回連絡予定日":"2024-12-20T10:00:00+09:00","作成日時":"2024-12-18T14:35:22+09:00","更新日時":"2024-12-18T14:35:22+09:00"},{"連絡履歴ID":"rec-001","顧客ID":"cust-2847","修理案件ID":"repair-5921","連絡日時":"2024-11-15T14:32:00+09:00","連絡方法":"メール","連絡内容":"修理見積もり金額¥28,500に対する承認。本日中に修理開始希望。","対応者":"佐藤美咲","次回連絡予定日":"2024-11-16T10:00:00+09:00","作成日時":"2024-11-15T14:35:22+09:00","更新日時":"2024-11-15T14:35:22+09:00"},{"連絡履歴ID":"rec-001","顧客ID":"cust-0847","修理案件ID":"repair-2156","連絡日時":"2024-12-15 14:30:00","連絡方法":"電話","連絡内容":"ノートパソコンのバッテリー交換作業が完了し、動作確認中。明日中に修理完了予定と案内","対応者":"佐藤花子","次回連絡予定日":"2024-12-16 10:00:00","作成日時":"2024-12-15 14:35:00","更新日時":"2024-12-15 14:35:00"},{"連絡履歴ID":"rec-001","顧客ID":"cust-2847","修理案件ID":"repair-5634","連絡日時":"2024-12-15T14:30:00+09:00","連絡方法":"電話","連絡内容":"配送遅延のお詫びと、代替機の無償貸出または納期短縮対応について説明。顧客了承。","対応者":"佐藤美咲","次回連絡予定日":"2024-12-22T10:00:00+09:00","作成日時":"2024-12-15T14:35:00+09:00","更新日時":"2024-12-15T14:35:00+09:00"},{"連絡履歴ID":"rec-001","顧客ID":"cust-0847","修理案件ID":"repair-2156","連絡日時":"2024-12-18T14:30:00+09:00","連絡方法":"電話","連絡内容":"修理完了後3日で冷蔵庫の製氷機能が再び停止。顧客と部品交換での対応を協議し、来週金曜の訪問修理で合意。","対応者":"佐藤健一","次回連絡予定日":"2024-12-20T09:00:00+09:00","作成日時":"2024-12-18T14:35:00+09:00","更新日時":"2024-12-18T14:35:00+09:00"},{"連絡履歴ID":"rec-001","顧客ID":"cust-0847","修理案件ID":"repair-2156","連絡日時":"2024-12-15 14:30:00","連絡方法":"SMS","連絡内容":"来店予約のリマインダー。12月18日（水）14時の修理受付予約をご確認ください。ご変更の場合はお電話ください。","対応者":"自動送信システム","次回連絡予定日":"2024-12-18 13:00:00","作成日時":"2024-12-15 14:30:00","更新日時":"2024-12-15 16:45:00"},{"連絡履歴ID":"rec-001","顧客ID":"cust-0847","修理案件ID":"repair-2024-1523","連絡日時":"2024-11-15T14:30:00+09:00","連絡方法":"電話","連絡内容":"基板交換に伴う追加費用15,000円の発生について説明し、顧客から承諾を得た","対応者":"鈴木花子","次回連絡予定日":"2024-11-18T09:00:00+09:00","作成日時":"2024-11-15T14:35:22+09:00","更新日時":"2024-11-15T14:35:22+09:00"},{"連絡履歴ID":"rec-001","顧客ID":"cus-0847","修理案件ID":"rep-2024-1523","連絡日時":"2025-01-15T14:30:00+09:00","連絡方法":"電話","連絡内容":"修理完了後の使用状況確認。動作良好で満足いただけた。今後の定期メンテナンスについて案内。","対応者":"佐藤花子","次回連絡予定日":null,"作成日時":"2025-01-15T14:35:00+09:00","更新日時":"2025-01-15T14:35:00+09:00"},{"連絡履歴ID":"rec-001","顧客ID":"cust-2847","修理案件ID":"repair-5621","連絡日時":"2024-11-15T14:30:00+09:00","連絡方法":"電話","連絡内容":"修理依頼のキャンセル申し出。理由は修理費用が予算超過のため。代替案として部分修理の提案を行い、顧客が検討することで合意。","対応者":"山田花子","次回連絡予定日":"2024-11-22T10:00:00+09:00","作成日時":"2024-11-15T14:35:00+09:00","更新日時":"2024-11-15T14:35:00+09:00"}],"ログインユーザー":[{"ユーザーID":"rec-001","ログインID":"admin@company.jp","パスワードハッシュ":"$2b$12$abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQR","ユーザー名":"山田太郎","メールアドレス":"admin@company.jp","役割":"システム管理者","有効フラグ":true,"最終ログイン日時":"2025-01-15T09:30:45Z","作成日時":"2024-04-01T10:00:00Z","更新日時":"2025-01-10T14:20:30Z","作成者":"初期設定"},{"ユーザーID":"rec-001","ログインID":"suzuki.hiroshi","パスワードハッシュ":"$2b$12$abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQ","ユーザー名":"鈴木寛","メールアドレス":"suzuki.hiroshi@repair-company.jp","役割":"修理部門長","有効フラグ":true,"最終ログイン日時":"2025-01-15T09:30:00+09:00","作成日時":"2024-04-01T10:00:00+09:00","更新日時":"2025-01-15T09:30:00+09:00","作成者":"yamada.taro"},{"ユーザーID":"rec-001","ログインID":"tanaka.taro@repair-service.jp","パスワードハッシュ":"$2b$12$abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJ","ユーザー名":"田中太郎","メールアドレス":"tanaka.taro@repair-service.jp","役割":"修理担当者","有効フラグ":true,"最終ログイン日時":"2025-01-15 08:30:00","作成日時":"2024-04-10 09:15:00","更新日時":"2025-01-15 08:30:00","作成者":"admin"},{"ユーザーID":"rec-001","ログインID":"tanaka.taro@company.jp","パスワードハッシュ":"$2b$12$abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRST","ユーザー名":"田中太郎","メールアドレス":"tanaka.taro@company.jp","役割":"営業","有効フラグ":true,"最終ログイン日時":"2025-01-15T09:30:00+09:00","作成日時":"2024-04-10T14:20:00+09:00","更新日時":"2025-01-15T09:30:00+09:00","作成者":"yamada.hanako@company.jp"},{"ユーザーID":"rec-001","ログインID":"suzuki.yuki@company.jp","パスワードハッシュ":"$2b$12$N9qo8uLOickgx2ZMRZoMyeIjZAgcg7b3XeKeUxWdeS86E36P4/KFm","ユーザー名":"鈴木由紀","メールアドレス":"suzuki.yuki@company.jp","役割":"事務スタッフ","有効フラグ":true,"最終ログイン日時":"2025-01-15 09:30:00","作成日時":"2024-04-10 14:20:00","更新日時":"2025-01-15 09:30:00","作成者":"admin"},{"ユーザーID":"550e8400-e29b-41d4-a716-446655440000","ログインID":"suzuki.quality@repairco.jp","パスワードハッシュ":"$2b$12$abcdefghijklmnopqrstuvwxyz1234567890","ユーザー名":"鈴木検査","メールアドレス":"suzuki.quality@repairco.jp","役割":"品質管理者","有効フラグ":true,"最終ログイン日時":"2025-01-15 09:30:00","作成日時":"2024-04-10 14:20:00","更新日時":"2025-01-15 09:30:00","作成者":"佐藤太郎"},{"ユーザーID":"rec-001","ログインID":"suzuki.manager@company.jp","パスワードハッシュ":"$2b$12$abcdef1234567890abcdef1234567890abcdef1234567890abcdef","ユーザー名":"鈴木営業管理","メールアドレス":"suzuki.manager@company.jp","役割":"営業管理者","有効フラグ":true,"最終ログイン日時":"2025-01-15T09:30:00+09:00","作成日時":"2024-04-01T10:00:00+09:00","更新日時":"2025-01-15T09:30:00+09:00","作成者":"admin"},{"ユーザーID":"rec-001","ログインID":"suzuki.hanako","パスワードハッシュ":"$2b$12$abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQR","ユーザー名":"鈴木花子","メールアドレス":"suzuki.hanako@company.jp","役割":"修理技術者（研修中）","有効フラグ":true,"最終ログイン日時":"2025-01-15T09:30:00+09:00","作成日時":"2024-12-01T10:00:00+09:00","更新日時":"2025-01-15T09:30:00+09:00","作成者":"yamamoto.taro"},{"ユーザーID":"rec-001","ログインID":"tanaka.taro@company.jp","パスワードハッシュ":"$2b$12$abcdefghijklmnopqrstuvwxyz1234567890","ユーザー名":"田中太郎","メールアドレス":"tanaka.taro@company.jp","役割":"修理担当者","有効フラグ":false,"最終ログイン日時":"2025-01-15 17:30:00","作成日時":"2023-04-10 09:15:00","更新日時":"2025-01-31 14:45:00","作成者":"admin"},{"ユーザーID":"rec-001","ログインID":"kyoryoku_suzuki@repair-partner.co.jp","パスワードハッシュ":"$2b$12$abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQR","ユーザー名":"鈴木健一","メールアドレス":"kyoryoku_suzuki@repair-partner.co.jp","役割":"修理担当者（協力会社）","有効フラグ":true,"最終ログイン日時":"2025-01-15 09:30:00","作成日時":"2024-06-20 14:15:00","更新日時":"2025-01-15 09:30:00","作成者":"山田太郎"}],"ユーザー権限":[{"ユーザー権限ID":"rec-001","ユーザーID":"rec-u-0042","権限コード":"ADMIN","権限名":"システム管理者","説明":"システム全体の管理機能と全機能へのアクセス権を有する最高権限","有効フラグ":true,"作成日時":"2024-04-01T09:00:00+09:00","更新日時":"2025-01-15T14:30:00+09:00","作成者":"rec-u-0001","更新者":"rec-u-0001"},{"ユーザー権限ID":"rec-001","ユーザーID":"rec-usr-0847","権限コード":"TECHNICIAN","権限名":"修理技術者","説明":"修理作業の実施、進捗状況の報告、作業内容の記録が可能な権限","有効フラグ":true,"作成日時":"2024-04-15T09:30:00+09:00","更新日時":"2024-11-20T14:22:00+09:00","作成者":"rec-usr-0001","更新者":"rec-usr-0002"},{"ユーザー権限ID":"rec-001","ユーザーID":"rec-u-0847","権限コード":"CUSTOMER_SERVICE","権限名":"カスタマーサービス担当者","説明":"顧客からの問い合わせ対応と修理状況確認、進捗報告が可能な権限","有効フラグ":true,"作成日時":"2024-04-15T09:30:00+09:00","更新日時":"2025-01-22T14:15:00+09:00","作成者":"rec-u-0001","更新者":"rec-u-0002"},{"ユーザー権限ID":"rec-001","ユーザーID":"rec-usr-042","権限コード":"SALES_QUOTATION","権限名":"営業見積作成者","説明":"見積書の作成・編集・発行と顧客情報の参照・更新が可能な営業職向け権限","有効フラグ":true,"作成日時":"2024-04-15T09:30:00+09:00","更新日時":"2025-01-20T14:15:00+09:00","作成者":"rec-usr-001","更新者":"rec-usr-015"},{"ユーザー権限ID":"rec-001","ユーザーID":"rec-u-0847","権限コード":"DEPARTMENT_MANAGER","権限名":"部門マネージャー","説明":"部下の勤務管理、評価、売上レポート閲覧、部門予算の確認が可能","有効フラグ":true,"作成日時":"2024-04-15 09:30:00","更新日時":"2025-01-20 14:15:00","作成者":"rec-u-0001","更新者":"rec-u-0002"},{"ユーザー権限ID":"rec-001","ユーザーID":"rec-0042","権限コード":"CUSTOMER_VIEW_REPAIR_HISTORY","権限名":"修理依頼履歴閲覧権限","説明":"顧客が自身の修理依頼履歴と進捗状況をシステムで確認できる基本権限","有効フラグ":true,"作成日時":"2024-04-15T09:30:00+09:00","更新日時":"2024-10-22T14:15:00+09:00","作成者":"rec-0001","更新者":"rec-0008"},{"ユーザー権限ID":"rec-001","ユーザーID":"rec-u-0047","権限コード":"ACCOUNTING_MANAGER","権限名":"会計管理者","説明":"請求書・支払い伝票の作成・承認、入出金管理、決算関連書類の閲覧・編集が可能","有効フラグ":true,"作成日時":"2024-04-15T09:30:00+09:00","更新日時":"2025-01-20T14:15:00+09:00","作成者":"rec-u-0001","更新者":"rec-u-0002"},{"ユーザー権限ID":"rec-001","ユーザーID":"rec-u-0847","権限コード":"QUALITY_INSPECTOR","権限名":"品質検査員","説明":"修理完了後の製品検査記録の確認・承認権限。検査結果の登録と検査レポートの出力が可能。","有効フラグ":true,"作成日時":"2024-04-15T09:30:00+09:00","更新日時":"2024-12-20T14:22:00+09:00","作成者":"rec-u-0001","更新者":"rec-u-0012"},{"ユーザー権限ID":"rec-001","ユーザーID":"rec-0042","権限コード":"VIEWER","権限名":"閲覧者","説明":"システム内の公開情報および割り当てられた範囲内のデータのみ閲覧可能。編集・削除権限なし。","有効フラグ":true,"作成日時":"2024-06-15 09:30:00","更新日時":"2025-01-20 14:15:00","作成者":"rec-0001","更新者":"rec-0008"},{"ユーザー権限ID":"rec-001","ユーザーID":"rec-usr-042","権限コード":"PARTNER_VIEWER","権限名":"協力案件情報閲覧権限","説明":"外部パートナー企業が割り当てられた協力案件の情報を閲覧できる権限。プロジェクト詳細、進捗状況、成果物へのアクセスが可能。","有効フラグ":true,"作成日時":"2024-11-15T09:30:00+09:00","更新日時":"2025-01-08T14:22:00+09:00","作成者":"rec-usr-001","更新者":"rec-usr-005"}],"状態マスタ":[{"状態ID":"rec-001","状態コード":"受付","状態名":"受付","説明":"修理依頼が初めて登録された状態。顧客情報と修理内容の基本情報が入力されている段階。","表示順序":1,"有効フラグ":true,"作成日時":"2024-04-01T09:00:00Z","更新日時":"2024-04-01T09:00:00Z","作成者":"rec-user-001","更新者":"rec-user-001"},{"状態ID":"rec-001","状態コード":"診断中","状態名":"診断中","説明":"修理内容の診断・調査を実施中。顧客への連絡待ちまたは部品確認中の場合がある。","表示順序":2,"有効フラグ":true,"作成日時":"2024-04-15 09:30:00","更新日時":"2024-11-20 14:45:00","作成者":"rec-user-001","更新者":"rec-user-002"},{"状態ID":"rec-001","状態コード":"見積待ち","状態名":"見積待ち","説明":"顧客への見積書提示を待機中。診断完了後、営業確認を経て見積提示予定。","表示順序":3,"有効フラグ":true,"作成日時":"2024-04-15 09:30:00","更新日時":"2024-12-10 14:20:00","作成者":"rec-user-001","更新者":"rec-user-002"},{"状態ID":"rec-001","状態コード":"修理中","状態名":"修理中","説明":"顧客が見積を承認し、修理作業が進行中の状態。作業完了後は完了状態へ遷移。","表示順序":4,"有効フラグ":true,"作成日時":"2024-01-15T09:30:00","更新日時":"2024-11-20T14:45:00","作成者":"rec-u001","更新者":"rec-u002"},{"状態ID":"rec-001","状態コード":"quality_check","状態名":"最終検査中","説明":"修理完了後の品質確認・動作検証を実施中。顧客納品前の最終段階。","表示順序":5,"有効フラグ":true,"作成日時":"2024-10-15T09:30:00+09:00","更新日時":"2025-01-22T14:15:00+09:00","作成者":"rec-user-001","更新者":"rec-user-003"},{"状態ID":"rec-001","状態コード":"納品準備完了","状態名":"納品準備完了","説明":"修理作業が完了し、顧客への納品に向けた検査・梱包・配送準備が完了した状態。この状態から納品手配へ遷移可能。","表示順序":5,"有効フラグ":true,"作成日時":"2024-06-15T09:30:00+09:00","更新日時":"2025-01-10T14:20:00+09:00","作成者":"rec-u001","更新者":"rec-u002"},{"状態ID":"rec-001","状態コード":"キャンセル","状態名":"キャンセル","説明":"顧客都合またはシステム判定により案件がキャンセルされた終了状態。以降の作業は行わない。","表示順序":6,"有効フラグ":true,"作成日時":"2024-04-15T09:30:00+09:00","更新日時":"2024-04-15T09:30:00+09:00","作成者":"rec-user-001","更新者":"rec-user-001"},{"状態ID":"rec-001","状態コード":"warranty_repair","状態名":"保証修理中","説明":"保証期間内の製品に対する無償修理対応を実施中の状態。顧客への連絡済み。","表示順序":4,"有効フラグ":true,"作成日時":"2024-06-15T09:30:00+09:00","更新日時":"2025-01-20T14:45:00+09:00","作成者":"rec-u-001","更新者":"rec-u-002"},{"状態ID":"rec-001","状態コード":"部品待ち","状態名":"部品取り寄せ中","説明":"必要な部品の納入待ちのため、修理作業を一時保留している状態。納入予定日を案件に記録し、到着後に修理工程を再開する。","表示順序":4,"有効フラグ":true,"作成日時":"2024-06-15T09:30:00","更新日時":"2025-01-20T14:15:00","作成者":"rec-user-001","更新者":"rec-user-002"},{"状態ID":"rec-001","状態コード":"suspended_contact_unavailable","状態名":"顧客連絡不可","説明":"顧客への連絡が取れない状態。一定期間連絡試行後、対応を一時中断。再度連絡可能になるまで保留。","表示順序":5,"有効フラグ":true,"作成日時":"2024-11-15T10:30:00+09:00","更新日時":"2024-11-15T10:30:00+09:00","作成者":"rec-user-001","更新者":"rec-user-001"}],"見積金額段階設定":[{"見積金額段階設定ID":"rec-001","段階名":"小額修理","最小金額":0,"最大金額":10000,"承認者権限レベル":"現場責任者","手数料率":5,"備考":"現場での即時承認が可能。書類提出は事後報告で対応。","有効フラグ":true,"作成日時":"2024-04-01T09:30:00+09:00","更新日時":"2024-10-15T14:20:00+09:00","作成者":"rec-user-0001","更新者":"rec-user-0002"},{"見積金額段階設定ID":"rec-001","段階名":"中額修理","最小金額":10000,"最大金額":500000,"承認者権限レベル":"部長","手数料率":8,"備考":"部長承認が必要。見積書作成から3営業日以内に承認完了のこと。","有効フラグ":true,"作成日時":"2024-04-15T09:30:00+09:00","更新日時":"2025-01-20T14:15:00+09:00","作成者":"rec-user-0001","更新者":"rec-user-0002"},{"見積金額段階設定ID":"rec-001","段階名":"高額修理","最小金額":500000,"最大金額":2000000,"承認者権限レベル":"事業部長","手数料率":8,"備考":"複数部品交換・大規模修理が対象。事業部長の承認必須。","有効フラグ":true,"作成日時":"2024-04-15 09:30:00","更新日時":"2025-01-20 14:15:00","作成者":"rec-user-0001","更新者":"rec-user-0002"},{"見積金額段階設定ID":"rec-001","段階名":"特別高額修理","最小金額":2000000,"最大金額":99999999,"承認者権限レベル":"役員","手数料率":8,"備考":"2000万円以上の案件は経営会議での事前協議が必須","有効フラグ":true,"作成日時":"2024-04-01T09:30:00","更新日時":"2025-01-15T14:20:00","作成者":"rec-user-0001","更新者":"rec-user-0002"},{"見積金額段階設定ID":"rec-001","段階名":"緊急対応小額修理","最小金額":10000,"最大金額":50000,"承認者権限レベル":"マネージャー","手数料率":15,"備考":"24時間以内の対応が必要な小額修理案件に適用。通常手数料10%から5%割増。","有効フラグ":true,"作成日時":"2024-10-15 09:30:00","更新日時":"2025-01-08 14:22:00","作成者":"rec-user-0042","更新者":"rec-user-0087"},{"見積金額段階設定ID":"rec-001","段階名":"中額修理（定期保守割引）","最小金額":100000,"最大金額":500000,"承認者権限レベル":"部長","手数料率":8,"備考":"定期保守契約者向け。通常10%から2%割引適用。","有効フラグ":true,"作成日時":"2024-04-15 09:30:00","更新日時":"2025-01-20 14:15:00","作成者":"rec-user-0001","更新者":"rec-user-0002"},{"見積金額段階設定ID":"rec-001","段階名":"新規顧客向け高額修理","最小金額":500000,"最大金額":2000000,"承認者権限レベル":"部長以上","手数料率":8,"備考":"新規顧客の信用調査完了後、営業部長の事前確認が必須","有効フラグ":true,"作成日時":"2024-04-15T09:30:00","更新日時":"2025-01-20T14:15:00","作成者":"rec-user-0042","更新者":"rec-user-0089"},{"見積金額段階設定ID":"rec-001","段階名":"冬季高額修理","最小金額":500000,"最大金額":1500000,"承認者権限レベル":"部長以上","手数料率":8,"備考":"冬季の暖房機器故障対応により手数料率を通常より2%引き上げ","有効フラグ":true,"作成日時":"2024-09-15T10:30:00+09:00","更新日時":"2024-11-01T14:20:00+09:00","作成者":"rec-user-0042","更新者":"rec-user-0028"}],"自動催促設定":[{"自動催促設定ID":"rec-001","設定名":"修理受付初期確認催促","対象状態ID":"rec-0042","催促トリガー日数":3,"催促方法":"メール","催促メッセージテンプレート":"お客様の修理案件について、受付確認のご連絡です。ご不明な点がございましたら、お気軽にお問い合わせください。","最大催促回数":1,"催促間隔日数":0,"有効フラグ":true,"作成日時":"2024-10-15T09:30:00+09:00","更新日時":"2024-10-15T09:30:00+09:00","作成者":"rec-0501","更新者":"rec-0501"},{"自動催促設定ID":"rec-001","設定名":"修理中状態進捗遅延催促","対象状態ID":"rec-state-002","催促トリガー日数":7,"催促方法":"メール","催促メッセージテンプレート":"お世話になっております。ご依頼いただいた修理案件が中断状態から7日経過しております。進捗状況のご確認をお願いいたします。","最大催促回数":3,"催促間隔日数":3,"有効フラグ":true,"作成日時":"2024-11-15T09:30:00","更新日時":"2024-12-10T14:20:00","作成者":"rec-user-045","更新者":"rec-user-045"},{"自動催促設定ID":"rec-001","設定名":"修理完了後の引き取り催促","対象状態ID":"rec-status-completed","催促トリガー日数":5,"催促方法":"メール","催促メッセージテンプレート":"お世話になっております。ご依頼いただいた修理が完了いたしました。お手数ですがお早めにご引き取りください。","最大催促回数":3,"催促間隔日数":3,"有効フラグ":true,"作成日時":"2024-10-15 09:30:00","更新日時":"2025-01-20 14:15:00","作成者":"rec-user-yamada","更新者":"rec-user-suzuki"},{"自動催促設定ID":"rec-001","設定名":"見積承認待ち顧客確認催促","対象状態ID":"rec-state-002","催促トリガー日数":10,"催促方法":"メール","催促メッセージテンプレート":"お世話になっております。先日ご提示させていただきました見積書についてのご確認をお願いいたします。ご不明な点やご質問がございましたら、お気軽にお問い合わせください。","最大催促回数":3,"催促間隔日数":7,"有効フラグ":true,"作成日時":"2024-11-15T09:30:00+09:00","更新日時":"2024-11-15T09:30:00+09:00","作成者":"rec-user-001","更新者":"rec-user-001"},{"自動催促設定ID":"rec-001","設定名":"部品待機中の納期確認催促","対象状態ID":"rec-state-waiting-parts","催促トリガー日数":14,"催促方法":"メール","催促メッセージテンプレート":"お世話になっております。ご依頼いただいた修理案件について、部品手配から14日が経過いたしました。現在の納期状況をご確認いただき、ご連絡いただけますようお願いいたします。","最大催促回数":3,"催促間隔日数":7,"有効フラグ":true,"作成日時":"2024-11-15T09:30:00","更新日時":"2025-01-20T14:15:00","作成者":"rec-user-yamada","更新者":"rec-user-suzuki"},{"自動催促設定ID":"rec-001","設定名":"修理保留案件の再開催促","対象状態ID":"rec-102","催促トリガー日数":30,"催促方法":"電話","催促メッセージテンプレート":"いつもお世話になっております。修理案件{{案件番号}}がお預かりから30日経過いたしました。修理再開のご意向をお聞かせいただけますでしょうか。","最大催促回数":3,"催促間隔日数":7,"有効フラグ":true,"作成日時":"2024-10-15T09:30:00","更新日時":"2025-01-20T14:45:00","作成者":"rec-user-001","更新者":"rec-user-005"},{"自動催促設定ID":"rec-001","設定名":"高額修理案件の最終確認催促","対象状態ID":"rec-state-009","催促トリガー日数":2,"催促方法":"メール","催促メッセージテンプレート":"お世話になっております。ご依頼いただいた修理案件の最終確認をお願いいたします。","最大催促回数":3,"催促間隔日数":1,"有効フラグ":true,"作成日時":"2024-11-15 09:30:00","更新日時":"2025-01-22 14:15:00","作成者":"rec-user-042","更新者":"rec-user-042"},{"自動催促設定ID":"rec-001","設定名":"長期修理案件の定期進捗報告催促","対象状態ID":"rec-state-002","催促トリガー日数":21,"催促方法":"メール","催促メッセージテンプレート":"お世話になっております。ご依頼いただいた修理案件の進捗状況をお知らせください。","最大催促回数":4,"催促間隔日数":21,"有効フラグ":true,"作成日時":"2024-10-15T09:30:00","更新日時":"2024-12-20T14:15:00","作成者":"rec-user-045","更新者":"rec-user-045"},{"自動催促設定ID":"rec-001","設定名":"未払い案件の支払い催促","対象状態ID":"rec-state-unpaid","催促トリガー日数":15,"催促方法":"メール","催促メッセージテンプレート":"お世話になっております。ご請求から15日が経過いたしました。お手数ですがお支払いのほどよろしくお願いいたします。","最大催促回数":3,"催促間隔日数":7,"有効フラグ":true,"作成日時":"2024-10-15 09:30:00","更新日時":"2025-01-20 14:15:00","作成者":"rec-user-001","更新者":"rec-user-002"},{"自動催促設定ID":"rec-001","設定名":"修理キャンセル確認の最終確認催促","対象状態ID":"rec-state-002","催促トリガー日数":7,"催促方法":"メール","催促メッセージテンプレート":"お客様へのご連絡です。修理案件がキャンセル保留状態のままとなっております。7日以内にご返答いただきますようお願いいたします。","最大催促回数":2,"催促間隔日数":3,"有効フラグ":true,"作成日時":"2024-11-15T09:30:00","更新日時":"2024-11-15T09:30:00","作成者":"rec-user-001","更新者":"rec-user-001"}]};
+window.AIVIC_PAGE_SCREEN_ID = "scr-1795168163853";
+window.AIVIC_PAGE_INIT_JS = "function(container) { let records = []; const tbody = container.querySelector('#records-tbody'); const material = container.querySelector('#material'); const labor = container.querySelector('#labor'); const total = container.querySelector('#total'); const updateTotal = () => { const m = parseInt(material.value) || 0; const l = parseInt(labor.value) || 0; total.textContent = (m + l).toLocaleString(); }; material.addEventListener('change', updateTotal); labor.addEventListener('change', updateTotal); const render = () => { tbody.innerHTML = records.map(r => '<tr data-id=\"' + r.案件ID + '\"><td>' + r.案件番号 + '</td><td>' + r.顧客名 + '</td><td>' + r.修理対象品目 + '</td><td>' + new Date(r.受付日時).toLocaleString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }) + '</td></tr>').join(''); if (records.length === 0) tbody.innerHTML = '<tr><td colspan=\"4\" class=\"empty-state\">該当データなし</td></tr>'; }; const load = async () => { try { records = await window.aivicApi.list(0); render(); } catch(e) { } }; container.querySelector('#search-btn').addEventListener('click', () => { render(); }); container.querySelector('#judge-btn').addEventListener('click', () => { alert('自動判定を実行しました'); }); load(); }";
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header class="top-bar">
+    <div class="top-bar-left">
+      <div class="logo">
+        みなと修理カルテ
+        <div class="logo-sub">修理業務管理システム</div>
+      </div>
+    </div>
+    <div class="top-bar-right">
+      <div class="user-avatar">U</div>
+      <div class="user-name">ユーザー</div>
+      <a href="./login.html" class="logout-link">ログアウト</a>
+    </div>
+  </header>
+
+  <div class="shell-wrapper" data-aivic-shell-pattern="sidebar" data-aivic-nav-position="left" data-aivic-density="balanced">
+    <aside class="sidebar">
+      <div class="sidebar-header">メニュー</div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">業務</div>
+          <a class="nav-item aivic-active" data-aivic-nav="scr-1795168135518" href="./scr-1795168135518.html">修理案件ダッシュボード</a>
+          <a class="nav-item" data-aivic-nav="scr-1795168145163" href="./scr-1795168145163.html">案件詳細・進捗管理</a>
+          <a class="nav-item" data-aivic-nav="scr-1795168163853" href="./scr-1795168163853.html">見積・承認管理</a>
+          <a class="nav-item" data-aivic-nav="scr-1795168174415" href="./scr-1795168174415.html">顧客連絡・催促</a>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">部品・納期</div>
+          <a class="nav-item" data-aivic-nav="scr-1795168184932" href="./scr-1795168184932.html">部品入荷・納期管理</a>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">完了・返却</div>
+          <a class="nav-item" data-aivic-nav="scr-1795168194920" href="./scr-1795168194920.html">修理完了・引き渡し</a>
+          <a class="nav-item" data-aivic-nav="scr-1795168205706" href="./scr-1795168205706.html">キャンセル・返却処理</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="content-area">
+      <div data-aivic-panel="scr-1795168135518" style="display:none"></div>
+      <div data-aivic-panel="scr-1795168145163" style="display:none"></div>
+      <div data-aivic-panel="scr-1795168163853" style="display:block">
+  <style>
+    [data-aivic-panel="scr-1795168163853"] { padding: 24px; background: var(--bg-main); }
+    [data-aivic-panel="scr-1795168163853"] .panel-title { font-size: 28px; font-weight: bold; margin-bottom: 24px; }
+    [data-aivic-panel="scr-1795168163853"] .section { background: var(--bg-card); padding: 24px; border-radius: 12px; margin-bottom: 24px; }
+    [data-aivic-panel="scr-1795168163853"] .section-title { font-size: 18px; font-weight: bold; margin-bottom: 16px; }
+    [data-aivic-panel="scr-1795168163853"] input, [data-aivic-panel="scr-1795168163853"] select { padding: 12px 16px; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; background: rgba(255,255,255,0.1); color: var(--text); font-size: 16px; min-height: 56px; width: 100%; }
+    [data-aivic-panel="scr-1795168163853"] .table-wrap { background: var(--bg-card); border-radius: 12px; overflow: auto; margin-bottom: 24px; }
+    [data-aivic-panel="scr-1795168163853"] table { width: 100%; border-collapse: collapse; }
+    [data-aivic-panel="scr-1795168163853"] th { background: rgba(0,0,0,0.05); padding: 16px; text-align: left; font-weight: bold; border-bottom: 1px solid #d4c9bd; }
+    [data-aivic-panel="scr-1795168163853"] td { padding: 16px; border-bottom: 1px solid #d4c9bd; height: 64px; }
+    [data-aivic-panel="scr-1795168163853"] tbody tr { cursor: pointer; }
+    [data-aivic-panel="scr-1795168163853"] tbody tr:hover { background: rgba(200,90,58,0.05); }
+    [data-aivic-panel="scr-1795168163853"] .action-btn { padding: 14px 32px; background: var(--primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; }
+    [data-aivic-panel="scr-1795168163853"] .action-btn:hover { background: var(--primary-hover); }
+    [data-aivic-panel="scr-1795168163853"] .empty-state { text-align: center; padding: 48px; color: var(--text-muted); }
+  </style>
+
+  <div class="panel-title">見積・金額判定・承認管理</div>
+
+  <div class="section">
+    <input type="text" id="search-input" data-testid="search-input" placeholder="案件番号・顧客名で検索">
+    <button class="action-btn" id="search-btn" data-testid="search-button" style="width: auto; margin-top: 8px;">検索</button>
+  </div>
+
+  <div class="table-wrap">
+    <table data-testid="record-list">
+      <thead>
+        <tr>
+          <th>案件番号</th>
+          <th>顧客名</th>
+          <th>修理内容</th>
+          <th>受付日時</th>
+        </tr>
+      </thead>
+      <tbody id="records-tbody">
+        <tr><td colspan="4" class="empty-state">読込中...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section" id="detail-area" style="display:none;">
+    <div class="section-title">見積金額入力</div>
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+      <input type="number" id="material" data-testid="material-cost-input" placeholder="材料費（円）" value="0">
+      <input type="number" id="labor" data-testid="labor-cost-input" placeholder="作業費（円）" value="0">
+    </div>
+    <div style="margin-top: 12px; font-weight: bold;">合計: ¥<span id="total">0</span></div>
+    <button class="action-btn" id="judge-btn" data-testid="judge-button" style="margin-top: 16px; width: auto;">自動判定を実行</button>
+  </div>
+</div>
+      <div data-aivic-panel="scr-1795168174415" style="display:none"></div>
+      <div data-aivic-panel="scr-1795168184932" style="display:none"></div>
+      <div data-aivic-panel="scr-1795168194920" style="display:none"></div>
+      <div data-aivic-panel="scr-1795168205706" style="display:none"></div>
+    </main>
+  </div>
+
+  
+  
+<script>
+(function() {
+  var TABLE_DEFS = window.AIVIC_TABLES || [];
+  var PRESET_SEED = window.AIVIC_PRESET_SEED || {};
+  var SYSTEM_NAME = window.AIVIC_SYSTEM_NAME || "";
+  var APP_ID = window.AIVIC_APP_ID || "";
+  var API_URL = (window.AIVIC_API_URL && window.AIVIC_API_URL !== "REPLACE_WITH_API_URL")
+    ? window.AIVIC_API_URL : window.location.origin;
+
+  // 通知 helper ( SPA 版と同じ )
+  window.aivicNotify = (function() {
+    function ensureContainer() {
+      var c = document.getElementById("aivic-toast-container");
+      if (c) return c;
+      c = document.createElement("div");
+      c.id = "aivic-toast-container";
+      c.style.cssText = "position:fixed;top:16px;right:16px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none;max-width:360px;";
+      document.body.appendChild(c);
+      return c;
+    }
+    function show(msg, type) {
+      var c = ensureContainer();
+      var el = document.createElement("div");
+      el.textContent = msg;
+      el.style.cssText = "padding:10px 16px;border-radius:8px;font-size:13px;line-height:1.4;pointer-events:auto;color:#fff;background:" + (type === "error" ? "#dc2626" : "#d97706");
+      c.appendChild(el);
+      setTimeout(function() {
+        el.style.transition = "opacity .3s";
+        el.style.opacity = "0";
+        setTimeout(function() { if (el.parentNode) el.parentNode.removeChild(el); }, 320);
+      }, type === "error" ? 6000 : 4500);
+    }
+    return {
+      error: function(msg) { show("❌ " + msg, "error"); },
+      warn:  function(msg) { show("⚠️ " + msg, "warn"); },
+    };
+  })();
+
+  // CRUD API ( SPA 版と同じ )
+  window.aivicApi = (function() {
+    function dbErr(op) { window.aivicNotify.error("データベースエラー ( " + op + " ): APIサーバーに接続できません。"); }
+    function newId() { return typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : "id-" + Date.now() + "-" + Math.random().toString(36).slice(2); }
+    function q(i) {
+      var t = TABLE_DEFS[i];
+      var dbP = (window.AIVIC_DB_TYPE && window.AIVIC_DB_TYPE !== "dynamodb") ? "&db=" + encodeURIComponent(window.AIVIC_DB_TYPE) : "";
+      return "?app=" + encodeURIComponent(APP_ID) + "&system=" + encodeURIComponent(SYSTEM_NAME) + "&table=" + encodeURIComponent(t ? t.tableName : "table" + i) + dbP;
+    }
+    return {
+      list: async function(tableIndex) {
+        if (!API_URL) return [];
+        try { var r = await fetch(API_URL + "/api/" + tableIndex + q(tableIndex)); var d = await r.json(); return Array.isArray(d) ? d : (d.items || []); }
+        catch(e) { dbErr("データ取得"); return []; }
+      },
+      save: async function(tableIndex, item) {
+        if (!API_URL) { dbErr("保存"); return null; }
+        var now = new Date().toISOString();
+        var rec = Object.assign({}, item, { id: item.id || newId(), createdAt: item.createdAt || now, updatedAt: now });
+        try { var r = await fetch(API_URL + "/api/" + tableIndex + q(tableIndex), { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(rec) }); return await r.json(); }
+        catch(e) { dbErr("保存"); return null; }
+      },
+      update: async function(tableIndex, id, changes) {
+        if (!API_URL) { dbErr("更新"); return null; }
+        try { var r = await fetch(API_URL + "/api/" + tableIndex + "/" + id + q(tableIndex), { method:"PUT", headers:{"Content-Type":"application/json"}, body:JSON.stringify(Object.assign({}, changes, {updatedAt: new Date().toISOString()})) }); return await r.json(); }
+        catch(e) { dbErr("更新"); return null; }
+      },
+      delete: async function(tableIndex, id) {
+        if (!API_URL) { dbErr("削除"); return {deleted:false}; }
+        try { await fetch(API_URL + "/api/" + tableIndex + "/" + id + q(tableIndex), {method:"DELETE"}); return {deleted:true}; }
+        catch(e) { dbErr("削除"); return {deleted:false}; }
+      },
+    };
+  })();
+
+  // showScreen はマルチページ構成ではページ遷移として動く。
+  var _aivicNavLastTime = 0;
+  var _aivicNavLastTarget = "";
+  var _aivicReady = false;
+  window.showScreen = function(screenId) {
+    if (!screenId) return;
+    if (screenId === window.AIVIC_PAGE_SCREEN_ID) return;
+    var targetPath = './' + encodeURIComponent(screenId) + '.html';
+    var currentName = (window.location.pathname.split('/').pop() || '');
+    if (currentName === (encodeURIComponent(screenId) + '.html') ||
+        currentName === (screenId + '.html')) {
+      return;
+    }
+    var now = Date.now();
+    if (_aivicNavLastTarget === targetPath && (now - _aivicNavLastTime) < 100) {
+      console.warn('[aivic] showScreen 連続呼び出し検知。 無限ループ防止のため抑制:', screenId);
+      return;
+    }
+    if (!_aivicReady) {
+      console.warn('[aivic] DOMContentLoaded 前の showScreen 呼び出し。 抑制:', screenId);
+      return;
+    }
+    _aivicNavLastTime = now;
+    _aivicNavLastTarget = targetPath;
+    window.location.href = targetPath;
+  };
+
+  function seedAllIfEmpty() {
+    if (!API_URL) return Promise.resolve();
+    return Promise.all(TABLE_DEFS.map(function(t, i) {
+      var preset = PRESET_SEED[t.tableName];
+      if (!Array.isArray(preset) || preset.length === 0) return Promise.resolve();
+      return window.aivicApi.list(i).then(function(existing) {
+        if (existing && existing.length > 0) return;
+        return Promise.all(preset.map(function(row) { return window.aivicApi.save(i, row); }));
+      }).catch(function() {});
+    }));
+  }
+
+  // ── 初期表示: このページ専用の panel に initFn を実行 ──
+  document.addEventListener("DOMContentLoaded", function() {
+    setTimeout(function() { _aivicReady = true; }, 1500);
+    var pageScreenId = window.AIVIC_PAGE_SCREEN_ID;
+    if (!pageScreenId) return;
+
+    // AI シェルが SPA 用の初期表示処理を持っていても、マルチページでは
+    // このファイルに割り当てられた画面だけを表示する。
+    document.querySelectorAll('[data-aivic-panel]').forEach(function(panel) {
+      var isCurrent = panel.getAttribute('data-aivic-panel') === pageScreenId;
+      panel.style.display = isCurrent ? 'block' : 'none';
+    });
+
+    document.querySelectorAll('[data-aivic-nav]').forEach(function(btn) {
+      var isActive = btn.getAttribute("data-aivic-nav") === pageScreenId;
+      btn.classList.toggle("aivic-active", isActive);
+      btn.setAttribute("aria-current", isActive ? "page" : "false");
+    });
+
+    var container = document.querySelector('[data-aivic-panel="' + pageScreenId + '"]');
+    if (!container) return;
+
+    // content 要素の hidden 強制除去 ( 2026-05-24 Playwright 大量 fail 対応 )
+    var isModalLike = function(el) {
+      if (!el || !el.classList) return false;
+      var cn = String(el.className || "");
+      if (/\bmodal\b|\bdialog\b|\boverlay\b|\bpopup\b|\bdropdown\b|\btooltip\b/i.test(cn)) return true;
+      var role = el.getAttribute && el.getAttribute("role");
+      if (role === "dialog" || role === "alertdialog" || role === "tooltip" || role === "menu") return true;
+      if (el.hasAttribute && (el.hasAttribute("data-modal") || el.hasAttribute("data-dropdown") || el.hasAttribute("data-popup") || el.hasAttribute("data-aivic-overlay"))) return true;
+      // 【2026-06-25】 class/role が無くても inline で画面を覆う overlay ( position:fixed ) は modal 扱いにして、
+      //  content 強制可視化が誤ってダイアログをロード時に表示してしまわないようにする。
+      if (el.style && el.style.position === "fixed") return true;
+      return false;
+    };
+    var unhideContentElements = function(root) {
+      var all = root.querySelectorAll('.hidden, [hidden], [style*="display:none"], [style*="display: none"]');
+      for (var k = 0; k < all.length; k++) {
+        var el = all[k];
+        if (isModalLike(el)) continue;
+        var p = el.parentElement;
+        var insideModal = false;
+        while (p && p !== root) {
+          if (isModalLike(p)) { insideModal = true; break; }
+          p = p.parentElement;
+        }
+        if (insideModal) continue;
+        el.classList.remove('hidden');
+        el.removeAttribute('hidden');
+        if (el.style && el.style.display === 'none') el.style.display = '';
+      }
+    };
+    try { unhideContentElements(container); } catch (e) { console.warn('[aivic] unhideContent failed:', e); }
+
+    var initJsSource = window.AIVIC_PAGE_INIT_JS;
+    if (!initJsSource) {
+      seedAllIfEmpty();
+      return;
+    }
+    var initFn = null;
+    try {
+      initFn = (new Function("return (" + initJsSource + ")"))();
+    } catch (e) {
+      console.error("[aivic] initJs compile error:", pageScreenId, e);
+      return;
+    }
+    if (typeof initFn !== "function") return;
+
+    seedAllIfEmpty().then(function() {
+      return Promise.all(TABLE_DEFS.map(function(t, i) {
+        return window.aivicApi.list(i)
+          .then(function(records) { return Object.assign({}, t, { records: records }); })
+          .catch(function() { return Object.assign({}, t, { records: [] }); });
+      }));
+    }).then(function(tables) {
+      try { initFn(container, API_URL, tables); } catch (e) { console.error("[aivic] initFn error:", pageScreenId, e); }
+      _aivicReady = true;
+    });
+  });
+
+  // 【2026-06-27 強化・必ず閉じられる保証】 モーダル/ダイアログを確実に閉じる安全網。
+  //  旧版は Esc のみ + セレクタ .overlay が class="modal-overlay" にマッチせず ( クラストークンが別 )
+  //  閉じられなかった ( ユーザー報告 2026-06-27: ダイアログが閉じない ) 。 ① Esc ② オーバーレイ背景クリック
+  //  ③ 閉じる系ボタン の 3 経路で閉じる。 セレクタは複合クラスも拾うよう [class*="overlay"] を含む。
+  //  閉じ方は「開クラス ( active/open/show 等 ) があれば外す ( 再オープン可 ) 、 無ければ inline display:none」。
+  //  modal-header 等の sub-part を誤って隠さないため [class*="modal"] は使わない。
+  var AIVIC_OVERLAY_SELECTOR = '[class*="overlay"],[data-aivic-overlay],[data-modal],[role="dialog"],[role="alertdialog"]';
+  var aivicCloseOverlay = function(el) {
+    if (!el || !el.classList) return;
+    var openClasses = ["active", "open", "show", "visible", "is-open", "is-active", "show-modal"];
+    var removed = false;
+    for (var c = 0; c < openClasses.length; c++) {
+      if (el.classList.contains(openClasses[c])) { el.classList.remove(openClasses[c]); removed = true; }
+    }
+    if (!removed && el.style) el.style.display = "none";
+  };
+  document.addEventListener("keydown", function(e) {
+    if (e.key !== "Escape" && e.keyCode !== 27) return;
+    var ov = document.querySelectorAll(AIVIC_OVERLAY_SELECTOR);
+    for (var i = 0; i < ov.length; i++) aivicCloseOverlay(ov[i]);
+  });
+  document.addEventListener("click", function(e) {
+    var t = e.target;
+    if (!t) return;
+    if (t.closest) {
+      var closer = t.closest('.modal-close,[data-modal-close],[data-close],[data-dismiss]');
+      if (closer) {
+        var oc = closer.closest(AIVIC_OVERLAY_SELECTOR);
+        if (oc) { aivicCloseOverlay(oc); return; }
+      }
+    }
+    // 背景 ( オーバーレイ要素そのもの ) を直接クリックした時のみ閉じる ( モーダル本体クリックでは閉じない ) 。
+    if (t.matches && t.matches(AIVIC_OVERLAY_SELECTOR) && t === e.target) {
+      aivicCloseOverlay(t);
+    }
+  });
+  // 【2026-06-28 強化・ロード時に必ず閉じる】 生成 AI が overlay を初期 display:none にし忘れた場合でも、
+  //  ロード直後にダイアログが画面を覆って操作不能になる事故 ( ユーザー報告 2026-06-28: ダイアログが常に表示され
+  //  閉じられない ) を防ぐ。 認識可能な overlay/dialog セレクタに該当する要素はロード時に必ず閉じる
+  //  ( 開クラス除去 or display:none ) 。 真にロード時表示すべき業務コンテンツは overlay セレクタに該当しないため
+  //  影響しない ( パネルコンテナは data-aivic-panel で別管理 ) 。
+  var aivicHideOverlaysOnLoad = function() {
+    var ov = document.querySelectorAll(AIVIC_OVERLAY_SELECTOR);
+    for (var i = 0; i < ov.length; i++) aivicCloseOverlay(ov[i]);
+  };
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", aivicHideOverlaysOnLoad);
+  } else {
+    aivicHideOverlaysOnLoad();
+  }
+})();
+
+</script>
+</body>
+</html>
